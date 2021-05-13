@@ -36,7 +36,7 @@ CREATE TABLE `forecast_user`  (
   `userDelete` smallint NULL DEFAULT 0,
   `userStatus` smallint NULL DEFAULT 0,
   `userDisable` smallint NULL DEFAULT 0,
-  `userVIP` smallint NULL DEFAULT NULL,
+  `userVIP` smallint NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `userId`(`userId`) USING BTREE,
   INDEX `userPhone`(`userPhone`) USING BTREE,

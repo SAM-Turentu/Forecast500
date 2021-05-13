@@ -7,8 +7,14 @@
 # Summary: ''
 
 
-from gino import Gino
+# from gino import Gino
+#
+# db = Gino()
 
-db = Gino()
+import peewee_async
+
+from conf import CONF
+
+db = peewee_async.PooledMySQLDatabase(**CONF.mysql)
 
 # db.set_bind('mysql://localhost/forecast500')
