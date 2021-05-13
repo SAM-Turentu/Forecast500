@@ -27,13 +27,6 @@ def runserver():
     app = tornado.web.Application(Route.get_urls(), **settings)
     app.listen(CONF.dd.port)
     # instance 需要调用 current
-    mysql_url = f'mysql+pymysql://{CONF.mysql.user}:{CONF.mysql.password}@{CONF.mysql.host}:{CONF.mysql.port}/{CONF.mysql.database}'
-    # engine = create_engine(mysql_url)
-    # Session = sessionmaker(bind=engine)
-    # session = Session()
-
-    # mysql_url = f'mysql+sqlalchemy://{CONF.mysql.user}:{CONF.mysql.password}@{CONF.mysql.host}:{CONF.mysql.port}/{CONF.mysql.database}'
-    tornado.ioloop.IOLoop.current().run_sync(lambda: db.set_bind(mysql_url))  # 没有成功连接数据库!!!
     tornado.ioloop.IOLoop.current().start()
 
 

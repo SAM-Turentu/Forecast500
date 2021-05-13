@@ -9,6 +9,10 @@
 
 import peewee_async
 
+import peewee_async
+
 from conf import CONF
+
+# db = peewee_async.PooledMySQLDatabase(**CONF.mysql)
 
 db = peewee_async.MySQLDatabase(**CONF.mysql)
