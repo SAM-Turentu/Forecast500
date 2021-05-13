@@ -7,8 +7,8 @@
 # Summary: ''
 
 
-from gino import Gino
+import peewee_async
 
-db = Gino()
+from conf import CONF
 
-# db.set_bind('mysql://localhost/forecast500')
+db = peewee_async.MySQLDatabase(**CONF.mysql)
