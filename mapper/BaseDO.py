@@ -7,9 +7,7 @@
 # Summary: ''
 
 
-import peewee_async
 from peewee import *
-
 from mapper import db
 
 

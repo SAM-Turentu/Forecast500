@@ -5,35 +5,12 @@
 # Filename: ForecastUserDO
 # CreateTime: 2021/5/11 20:39
 # Summary: ''
+import json
 
-
-# from mapper import db
-# from gino import Gino
-# from sqlalchemy import *
-
-# db = Gino()
 from backend.utils.Result import ReturnJson
+from mapper import db
 from mapper.BaseDO import BaseDO
 from peewee import *
-
-
-# class ForecastUserDO(db.Model):
-#     __tablename__ = 'forecast_user'
-#     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-#     userId = db.Column(db.CHAR(32), index=True, nullable=False)
-#     userPhone = db.Column(db.CHAR(32), index=True, nullable=False)
-#     userPassword = db.Column(db.CHAR(32))
-#     userName = db.Column(db.VARCHAR(64))
-#     userBirthday = db.Column(db.DateTime())
-#     userEmail = db.Column(db.VARCHAR(128))
-#     userSex = db.Column(db.SMALLINT(), default=0)
-#     userLoginTime = db.Column(db.DateTime())
-#     userCreateTime = db.Column(db.DateTime())
-#     userUpdateTime = db.Column(db.DateTime())
-#     userDelete = db.Column(db.SMALLINT(), default=0)
-#     userStatus = db.Column(db.SMALLINT(), default=0)
-#     userDisable = db.Column(db.SMALLINT(), default=0)
-#     userVIP = db.Column(db.SMALLINT(), default=0)
 
 
 class ForecastUserDO(BaseDO):
@@ -68,5 +45,43 @@ class UserService:
         @updateTime(upf): 2021/5/11 22:15
         """
 
-        await ForecastUserDO.create(userId=userId, userPhone=userPhone, userName=userName)
-        return ReturnJson.success(data={'userName': 'SAM', 'userPhone': '18292007162'})
+        # await db.create(userId=userId, userPhone=userPhone, userName=userName)
+        kw = {
+            'userId': userId,
+            'userPhone': userPhone,
+            'userName': userName,
+            'userPassword': None,
+            'userBirthday': None,
+            'userEmail': None,
+            'userSex': 1,
+            'userLoginTime': None,
+            'createTime': None,
+            'updateTime': None,
+            'userDelete': 1,
+            'userStatus': 1,
+            'userDisable': 1,
+            'userVIP': 1,
+        }
+        inst = ForecastUserDO(**kw)
+        await db.create(ForecastUserDO,
+                        userId=userId,
+                        userPhone=userPhone,
+                        userName=userName,
+                        userPassword=None,
+                        userBirthday=None,
+                        userEmail=None,
+                        userSex=1,
+                        userLoginTime=None,
+                        createTime=None,
+                        updateTime=None,
+                        userDelete=1,
+                        userStatus=1,
+                        userDisable=1,
+                        userVIP=1,
+                        )
+        data = await db.execute(ForecastUserDO.select())
+        _ret = []
+        for item in data:
+            _ret.append(item)
+        return _ret
+        # return ReturnJson.success(data=json.dumps(_ret))

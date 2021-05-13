@@ -97,10 +97,11 @@ class RegisterUserHandler(BaseHandler):
     @updateTime(upf): 2021/5/11 22:17
     """
 
-    @Return
+    # @Return
     async def post(self):
-        userId = uuid.uuid4()
+        userId = uuid.uuid4().__str__()
         userPhone = self.get_body_argument('userPhone')
         userName = self.get_body_argument('userName')
         service = UserService()
-        return await service.add_user(userId, userPhone, userName)
+        data = await service.add_user(userId, userPhone, userName)
+        return self.write(json.dumps(data))

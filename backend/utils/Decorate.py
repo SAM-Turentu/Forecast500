@@ -55,6 +55,6 @@ def Return(func):
                 res = ReturnJson(code=200, message='success')
             self.json(res)
         except Exception as e:
-            print(e)
+            print('return error: ', e)
 
     return wrapper

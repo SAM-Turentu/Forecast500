@@ -10,25 +10,23 @@
 import tornado.web
 import tornado.ioloop
 import tornado.options
-from sqlalchemy.orm import sessionmaker
-
 from backend.core.settings import settings
 from conf import CONF
 from controllers.HomeController import *
 
+
 # 项目启动命令添加下面命令，不添加则默认dev环境
 # --config-file=conf\\dev.ini
-from mapper import db
-from sqlalchemy import *
 
 
 def runserver():
     tornado.options.parse_command_line()
     app = tornado.web.Application(Route.get_urls(), **settings)
     app.listen(CONF.dd.port)
-    # instance 需要调用 current
     tornado.ioloop.IOLoop.current().start()
 
+
+# instance 需要调用 current
 
 if __name__ == '__main__':
     # tornado.ioloop.IOLoop.instance().run_sync(do_insert)
