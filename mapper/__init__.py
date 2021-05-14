@@ -18,6 +18,5 @@ from conf import CONF
 
 
 database = peewee_async.MySQLDatabase(**CONF.mysql)
+objects = peewee_async.Manager(database=database)
 database.set_allow_sync(False)
-db = peewee_async.Manager(database=database)
-print(db)

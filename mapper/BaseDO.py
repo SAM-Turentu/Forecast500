@@ -8,7 +8,7 @@
 
 
 from peewee import *
-from mapper import db
+from mapper import objects
 
 
 class BaseDO(Model):
@@ -16,7 +16,7 @@ class BaseDO(Model):
     updateTime = DateTimeField(verbose_name='更新时间')
 
     class Meta:
-        database = db
+        database = objects
         # objs = peewee_async.Manager(database)
         # Error, sync query is not allowed! Call the `.set_allow_sync()` or use the `.allow_sync()` context manager.
         # database.set_allow_sync(False)
