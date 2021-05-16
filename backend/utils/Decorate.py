@@ -49,12 +49,9 @@ def Return(func):
         @createTime: 2021/5/5 16:42
         @updateTime(upf): 2021/5/5 16:42
         """
-        try:
-            res = await func(self, *args, **kwargs)
-            if 'code' not in res.keys() and 'message' not in res.keys():
-                res = ReturnJson(code=200, message='success')
-            self.json(res)
-        except Exception as e:
-            print('return error: ', e)
+        res = await func(self, *args, **kwargs)
+        if 'code' not in res.keys() and 'message' not in res.keys():
+            res = ReturnJson(code=200, message='success')
+        self.json(res)
 
     return wrapper
