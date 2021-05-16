@@ -7,7 +7,8 @@
 # Summary: ''
 
 
-from backend.dbclient.mongodb_client import MongoDBClient
+from backend.dbclient.MongoDB_Client import MongoDBClient
+from backend.dbclient.MySQL_Client import MySQLClient
 from conf import CONF
 
 
@@ -47,3 +48,14 @@ class G(object):
         @updateTime(upf): 2021/4/29 20:43
         """
         return MongoDBClient.getInstance(self._conf.mongodb.host, self._conf.mongodb.port)
+
+    @property
+    def mysql(self):
+        """
+        @func name: mysql 数据库连接
+        @desc:
+        @author: SAM
+        @createTime: 2021/5/16 18:38
+        @updateTime(upf): 2021/5/16 18:38
+        """
+        return MySQLClient.getInstance()

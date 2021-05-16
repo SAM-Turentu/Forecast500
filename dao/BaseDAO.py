@@ -39,3 +39,14 @@ class BaseDAO():
         """
         return self.g.mongodb
 
+    @property
+    def mysql(self):
+        """
+        @func name:
+        @desc:
+        @author: SAM
+        @createTime: 2021/5/16 18:51
+        @updateTime(upf): 2021/5/16 18:51
+        """
+        return self.g.mysql
+
