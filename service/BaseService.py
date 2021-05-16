@@ -24,3 +24,14 @@ class BaseService(object):
         @updateTime(upf): 2021/4/29 21:26
         """
         return self.g.mongodb
+
+    @property
+    def mysql(self):
+        """
+        @func name:
+        @desc:
+        @author: SAM
+        @createTime: 2021/5/16 18:52
+        @updateTime(upf): 2021/5/16 18:52
+        """
+        return self.g.mysql

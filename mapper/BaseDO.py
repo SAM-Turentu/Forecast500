@@ -8,15 +8,37 @@
 
 
 from peewee import *
-from mapper import objects
+
+from backend.dbclient.MySQL_Client import MySQLClient
 
 
-class BaseDO(Model):
+class Base(Model):
+
+    @property
+    def dict(self):
+        """
+        @func name:
+        @desc: 
+        @author: SAM
+        @createTime: 2021/5/16 19:20
+        @updateTime(upf): 2021/5/16 19:20
+        """
+        return self
+
+    def to_json(self):
+        """
+        @func name:
+        @desc:
+        @author: SAM
+        @createTime: 2021/5/16 19:21
+        @updateTime(upf): 2021/5/16 19:21
+        """
+        return {'data': self}
+
+
+class BaseDO(Base):
     createTime = DateTimeField(verbose_name='创建时间')
     updateTime = DateTimeField(verbose_name='更新时间')
 
     class Meta:
-        database = objects
-        # objs = peewee_async.Manager(database)
-        # Error, sync query is not allowed! Call the `.set_allow_sync()` or use the `.allow_sync()` context manager.
-        # database.set_allow_sync(False)
+        database = MySQLClient.getInstance().database
