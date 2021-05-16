@@ -1,2 +1,2 @@
 # Forecast500
-python gino motor oslo.config  异步ORM 异步MongoDB
+python peewee peewee_async motor oslo.config  异步ORM 异步MongoDB
