@@ -30,5 +30,4 @@ def runserver():
 
 if __name__ == '__main__':
     # tornado.ioloop.IOLoop.instance().run_sync(do_insert)
-    service = UserService()
     runserver()
