@@ -36,7 +36,7 @@ class Base(Model):
         return {'data': self}
 
 
-class BaseDO(Base):
+class BaseDO(Model):
     createTime = DateTimeField(verbose_name='创建时间')
     updateTime = DateTimeField(verbose_name='更新时间')
 

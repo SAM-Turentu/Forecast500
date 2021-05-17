@@ -2,7 +2,7 @@
 # Author: SAM
 # Email: SAM-Turentu@outlook.com
 # Name: Forecast500
-# Filename: basehandler
+# Filename: Basehandler
 # CreateTime: 2021/5/5 16:59
 # Summary: ''
 
@@ -13,6 +13,7 @@ from typing import Optional, Awaitable, Union, Any
 from tornado.web import RequestHandler
 
 from backend.utils.Result import ReturnJson
+from backend.utils.Utils import Utils
 
 
 class BaseHandler(RequestHandler):
@@ -99,5 +100,5 @@ class BaseHandler(RequestHandler):
         @createTime: 2021/5/5 17:15
         @updateTime(upf): 2021/5/5 17:15
         """
-        self.write(json.dumps(result, cls=None, sort_keys=False))
+        self.write(json.dumps(result, cls=Utils.JSONEncoder(), sort_keys=False))
         self.finish()

@@ -34,3 +34,14 @@ class UserService(BaseService):
         """
         _ret = await self.userDAO.add_user(**kwargs)
         return ReturnJson.success(data=_ret)
+
+    async def query_user_list(self):
+        """
+        @func name:
+        @desc:
+        @author: SAM
+        @createTime: 2021/5/17 19:51
+        @updateTime(upf): 2021/5/17 19:51
+        """
+        _ret = await self.userDAO.query_user_list()
+        return ReturnJson.success(data=_ret)

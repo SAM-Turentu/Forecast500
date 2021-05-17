@@ -10,7 +10,7 @@
 import tornado.web
 import tornado.ioloop
 import tornado.options
-from backend.core.settings import settings
+from backend.core.Settings import settings
 from conf import CONF
 from controllers.HomeController import *
 

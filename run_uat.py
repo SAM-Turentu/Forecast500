@@ -9,7 +9,7 @@
 
 import tornado.web
 import tornado.ioloop
-from backend.core.settings import settings
+from backend.core.Settings import settings
 from conf import CONF
 
 

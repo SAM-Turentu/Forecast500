@@ -5,16 +5,15 @@
 # Filename: HomeController
 # CreateTime: 2021/4/27 21:59
 # Summary: ''
+
+
 import ast
 import json
-import uuid
-
-from backend.core.basehandler import BaseHandler
-from backend.core.route_handler import Route
+from backend.core.Basehandler import BaseHandler
+from backend.core.RouteHandler import Route
 from backend.utils.Decorate import Return
 from backend.utils.Result import ReturnJson
 from service.SourceDataService import SourceDataService
-from service.UserService import UserService
 
 
 @Route(r'/')
@@ -86,21 +85,3 @@ class FindAllDataHandler(BaseHandler):
         # all_data = await sourceService.find_all_data()
         return await sourceService.find_all_data()
 
-
-@Route('/register')
-class RegisterUserHandler(BaseHandler):
-    """
-    @interface name:
-    @desc:
-    @author: SAM
-    @createTime: 2021/5/11 22:17
-    @updateTime(upf): 2021/5/11 22:17
-    """
-
-    @Return
-    async def post(self):
-        userId = uuid.uuid4().__str__()
-        userPhone = self.get_body_argument('userPhone', None)
-        userName = self.get_body_argument('userName', None)
-        service = UserService()
-        return await service.register_user(userId=userId, userName=userName, userPhone=userPhone)

@@ -2,7 +2,7 @@
 # Author: SAM
 # Email: SAM-Turentu@outlook.com
 # Name: Forecast500
-# Filename: settings
+# Filename: Settings
 # CreateTime: 2021/4/25 19:36
 # Summary: 'tornado setting 文件'
 

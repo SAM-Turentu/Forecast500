@@ -47,12 +47,14 @@ class UserDAO(BaseDAO):
         @createTime: 2021/5/16 20:12
         @updateTime(upf): 2021/5/16 20:12
         """
-        data = await self.mysql.objects.execute(ForecastUserDO.select())
+        data = await self.mysql.objects.execute(ForecastUserDO.select().dicts())
         _ret = []
         for item in data:
-            _ret.append({
-                'userId': item.userId,
-                'userPhone': item.userPhone,
-                'userName': item.userName,
-            })
+            _ret.append(item)
+            # _ret.append({
+            #     'userId': item['userId'],
+            #     'userPhone': item['userPhone'],
+            #     'userName': item['userName'],
+            #     'create': item['createTime'],
+            # })
         return _ret
