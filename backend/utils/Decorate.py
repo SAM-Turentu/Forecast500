@@ -22,7 +22,7 @@ def DI(**kwargs):
     def outer(cls):
         """
         @func name:
-        @desc:
+        @desc: 注入一个属性
         @author: SAM
         @createTime: 2021/4/29 20:37
         @updateTime(upf): 2021/4/29 20:37

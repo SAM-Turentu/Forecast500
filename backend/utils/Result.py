@@ -92,6 +92,8 @@ class Result(object):
 
 
 ReturnJson = Result()
+
+
 # import sys
 # if __name__ == '__main__':
 #     res = ReturnJson(code=100, message='Hello，楠楠!')
@@ -106,3 +108,123 @@ ReturnJson = Result()
 #         print(222)
 #     print(ReturnJson.success(message='Hello World!'))
 #     print(ReturnJson.notFind(message='Hello World! Not Find', code=404))
+
+
+class IReturn:
+
+    def __init__(self, code=None, message=None, data=None, error_code=None, error_message=None):
+        """
+        @author: SAM
+        @CreateTime: 2021/6/3 16:43
+        @UpdateTime(upf): 2021/6/3 16:43
+        @desc: ''
+        """
+        self.code = code
+        self.message = message
+        self.data = data
+        self.error_code = error_code
+        self.error_message = error_message
+
+    def GetReturn(self):
+        """
+        @author: SAM
+        @CreateTime: 2021/6/3 17:03
+        @UpdateTime(upf): 2021/6/3 17:03
+        @desc: ''
+        """
+        # return {
+        #     'code': self.code,
+        #     'message': self.message,
+        #     'data': self.data,
+        # }
+        ...
+
+    def GetErrorReturn(self):
+        """
+        @author: SAM
+        @CreateTime: 2021/6/3 17:04
+        @UpdateTime(upf): 2021/6/3 17:04
+        @desc: ''
+        """
+        # return {
+        #     'error_code': self.error_code,
+        #     'error_message': self.error_message,
+        # }
+        ...
+
+
+class Return(IReturn):
+
+    def GetReturn(self):
+        """
+        @author: SAM
+        @CreateTime: 2021/6/3 17:11
+        @UpdateTime(upf): 2021/6/3 17:11
+        @desc: ''
+        """
+        return {
+            'code': self.code,
+            'message': self.message,
+            'data': self.data,
+        }
+
+
+class ISuccess:
+
+    def __init__(self):
+        """
+        @author: SAM
+        @CreateTime: 2021/6/3 17:12
+        @UpdateTime(upf): 2021/6/3 17:12
+        @desc: ''
+        """
+        ...
+
+
+class Success(ISuccess):
+
+    def success(self):
+        """
+        @author: SAM
+        @CreateTime: 2021/6/3 17:13
+        @UpdateTime(upf): 2021/6/3 17:13
+        @desc: ''
+        """
+        self.code = 200
+        self.message = 'success'
+        self.data = None
+
+    def notFind(self):
+        """
+        @author: SAM
+        @CreateTime: 2021/6/3 17:14
+        @UpdateTime(upf): 2021/6/3 17:14
+        @desc: ''
+        """
+        self.code = 204
+        self.message = 'not find'
+        self.data = None
+
+
+class IFailure:
+
+    def __init__(self):
+        """
+        @author: SAM
+        @CreateTime: 2021/6/3 17:15
+        @UpdateTime(upf): 2021/6/3 17:15
+        @desc: ''
+        """
+
+
+class Failure(IFailure):
+
+    def exception(self):
+        """
+        @author: SAM
+        @CreateTime: 2021/6/3 17:16
+        @UpdateTime(upf): 2021/6/3 17:16
+        @desc: ''
+        """
+        self.error_code = 500
+        self.error_message = 'exception'

@@ -8,6 +8,13 @@
 # href https://www.cnblogs.com/wuyuegb2312/archive/2013/04/09/3008320.html
 
 
+"""
+SimpleFactoryPattern
+简单工厂模式
+    特点：工厂根据条件产生不同功能的类
+"""
+
+
 class Operation:
     def GetResult(self):
         pass

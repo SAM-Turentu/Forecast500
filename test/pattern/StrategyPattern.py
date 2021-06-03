@@ -7,6 +7,13 @@
 # Summary: '策略模式'
 
 
+"""
+StrategyPattern
+策略模式
+    特点：定义算法家族并且分别分装，它们之间可以相互替换而不影响客户端
+"""
+
+
 class CashSuper:
     def AcceptCash(self, money):
         return 0
