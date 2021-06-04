@@ -12,7 +12,7 @@ from asyncio import Future
 from typing import Optional, Awaitable, Union, Any
 from tornado.web import RequestHandler
 
-from backend.utils.Result import ReturnJson
+from backend.utils.BaseReturn import ReturnJson
 from backend.utils.Utils import Utils
 
 
@@ -80,7 +80,7 @@ class BaseHandler(RequestHandler):
         exc_cls, exc_instance, trace = kwargs.get('exc_info')
         if status_code != 200:
             self.set_status(status_code)
-            self.write(ReturnJson.exception(message=exc_instance))
+            self.write(ReturnJson.EXCEPTION(error_message=exc_instance))
 
     def on_finish(self) -> None:
         """

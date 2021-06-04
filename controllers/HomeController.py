@@ -12,7 +12,6 @@ import json
 from backend.core.Basehandler import BaseHandler
 from backend.core.RouteHandler import Route
 from backend.utils.Decorate import Return
-from backend.utils.Result import ReturnJson
 from service.SourceDataService import SourceDataService
 
 
@@ -32,15 +31,15 @@ class HomeHandler(BaseHandler):
         value = self.get_argument('value')
         doc = {'value': value}
         doc = {'term': 21040, 'red_1': 2, 'red_2': 6, 'red_3': 7, 'red_4': 24, 'red_5': 28, 'red_6': 29, 'blue_1': 16}
-        sourceDataService = SourceDataService()
-        result = await sourceDataService.insert_source_data_service(doc)
-        if result:
-            ...
-        else:  # 插入失败
-            ...
+        # sourceDataService = SourceDataService()
+        # result = await sourceDataService.insert_source_data_service(doc)
+        # if result:
+        #     ...
+        # else:  # 插入失败
+        #     ...
         # return self.write(json.dumps(doc))
 
-        return ReturnJson.success(data=result)
+        # return ReturnJson.SUCCESS(data=result)
 
 
 @Route('/home')
@@ -84,4 +83,3 @@ class FindAllDataHandler(BaseHandler):
         sourceService = SourceDataService()
         # all_data = await sourceService.find_all_data()
         return await sourceService.find_all_data()
-

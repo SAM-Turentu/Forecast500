@@ -15,7 +15,7 @@ settings = {
     'static_url_prefix': CONF.settings.static_url_prefix,
     'cookie_secret': CONF.settings.cookie_secret,
     'xsrf_cookies': CONF.settings.xsrf_cookies,
-    # 'debug': CONF.settings.debug,
+    'debug': CONF.settings.debug,
     # 'autoreload': CONF.settings.autoreload,
     # 'ui_methods': CONF.settings.ui_methods,
 }

@@ -7,7 +7,7 @@
 # Summary: ''
 
 
-from backend.utils.Result import ReturnJson
+from backend.utils.BaseReturn import ReturnJson
 
 
 def DI(**kwargs):
@@ -52,8 +52,9 @@ def Return(func):
         @updateTime(upf): 2021/5/5 16:42
         """
         res = await func(self, *args, **kwargs)
-        if 'code' not in res.keys() and 'message' not in res.keys():
-            res = ReturnJson(code=200, message='success')
+        if not res or ('code' not in res.keys() and 'message' not in res.keys()) \
+                or ('error_code' not in res.keys() and 'error_message' not in res.keys()):
+            res = ReturnJson.SUCCESS()
         self.json(res)
 
     return wrapper

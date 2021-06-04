@@ -20,7 +20,7 @@ from controllers.HomeController import *
 
 
 def runserver():
-    # tornado.options.parse_command_line()
+    tornado.options.parse_command_line(final=False)
     app = tornado.web.Application(Route.get_urls(), **settings)
     app.listen(CONF.dd.port)
     tornado.ioloop.IOLoop.current().start()

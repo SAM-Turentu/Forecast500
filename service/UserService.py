@@ -7,7 +7,7 @@
 # Summary: ''
 
 
-from backend.utils.Result import ReturnJson
+from backend.utils.BaseReturn import ReturnJson
 from dao.UserDAO import UserDAO
 from service.BaseService import BaseService
 
@@ -33,7 +33,7 @@ class UserService(BaseService):
         @updateTime(upf): 2021/5/16 19:03
         """
         _ret = await self.userDAO.add_user(**kwargs)
-        return ReturnJson.success(data=_ret)
+        return ReturnJson.SUCCESS(data=_ret)
 
     async def query_user_list(self):
         """
@@ -44,4 +44,4 @@ class UserService(BaseService):
         @updateTime(upf): 2021/5/17 19:51
         """
         _ret = await self.userDAO.query_user_list()
-        return ReturnJson.success(data=_ret)
+        return ReturnJson.SUCCESS(data=_ret)
