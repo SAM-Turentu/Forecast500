@@ -7,7 +7,7 @@
 # Summary: '读取配置文件'
 
 
-# from oslo_log import log as logging
+from oslo_log import log as logging
 from oslo_config import cfg, types
 
 CONF = cfg.CONF
@@ -61,6 +61,14 @@ CONF.register_cli_opts([
     cfg.BoolOpt('autoreload', default=False),
     # cfg.StrOpt('ui_methods', default='default'),
 ], settings_group)
+# endregion
+
+# region Tornado Log
+log_group = cfg.OptGroup('log', title='Tornado log 配置')
+CONF.register_group(log_group)
+CONF.register_cli_opts([
+    cfg.StrOpt('path', default='/logs/tornado_main.log'),
+], log_group)
 # endregion
 
 # 在项目启动命令中添加配置模式：开发(dev)，测试(uat)，生产(prod)
