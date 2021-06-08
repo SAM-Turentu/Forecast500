@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 .idea/
+!.logs/tornado_main.log
 
