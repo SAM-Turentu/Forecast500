@@ -130,5 +130,5 @@ dmypy.json
 
 .idea/
 .logs/
-!.logs/tornado_main.log
+!logs/tornado_main.log
 
