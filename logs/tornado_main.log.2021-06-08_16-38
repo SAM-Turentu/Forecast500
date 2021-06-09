@@ -1,0 +1,2 @@
+[2;32m[2021-06-08 16:38:46 web web.py:log_request:2243 INFO][0m 200 GET /?value=123 (192.168.1.141) 3.03ms
+[2;32m[2021-06-08 16:38:46 web web.py:log_request:2243 INFO][0m 200 GET /?value=123 (192.168.1.141) 0.00ms

@@ -7,6 +7,7 @@
 # Summary: ''
 
 
+import tornado.auth
 import ast
 import json
 from backend.core.Basehandler import BaseHandler
@@ -16,7 +17,7 @@ from service.SourceDataService import SourceDataService
 
 
 @Route(r'/')
-class HomeHandler(BaseHandler):
+class HomeHandler(BaseHandler, tornado.auth.GoogleOAuth2Mixin):
     """
     @interface name:
     @desc:
@@ -27,10 +28,24 @@ class HomeHandler(BaseHandler):
 
     @Return
     async def get(self):
+        user = None
         json_dict = self.json_dict
-        value = self.get_argument('value')
-        doc = {'value': value}
-        doc = {'term': 21040, 'red_1': 2, 'red_2': 6, 'red_3': 7, 'red_4': 24, 'red_5': 28, 'red_6': 29, 'blue_1': 16}
+        user_name = self.get_argument('user', default=False)
+        if user_name:
+            # await self.get_authenticated_user(http_client=None)
+            user = await self.get_authenticated_user(
+                redirect_uri='www.baidu.com',
+                code=self.get_argument('code')
+            )
+        else:
+            self.authorize_redirect(
+                redirect_uri='www.baidu.com',
+                client_id='asdf',
+                response_type='code',
+                extra_params={'approval_prompt': 'auto'}
+            )
+        print(user)
+
         # sourceDataService = SourceDataService()
         # result = await sourceDataService.insert_source_data_service(doc)
         # if result:

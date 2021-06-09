@@ -1,2 +1,0 @@
-[2;32m[2021-06-08 15:23:15 web web.py:log_request:2243 INFO][0m 304 GET /?value=123 (192.168.1.141) 6.00ms
-[2;32m[2021-06-08 15:23:16 web web.py:log_request:2243 INFO][0m 304 GET /?value=123 (192.168.1.141) 1.00ms

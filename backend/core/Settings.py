@@ -16,6 +16,7 @@ settings = {
     'cookie_secret': CONF.settings.cookie_secret,
     'xsrf_cookies': CONF.settings.xsrf_cookies,
     'debug': CONF.settings.debug,
+    'google_oauth': {'key': 'google_oauth_sam'},
     # 'autoreload': CONF.settings.autoreload,
     # 'ui_methods': CONF.settings.ui_methods,
 }
