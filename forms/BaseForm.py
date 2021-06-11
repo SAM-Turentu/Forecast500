@@ -32,7 +32,7 @@ class BaseForm:
 
 class String(BaseForm):
 
-    def __init__(self, required=True, length: list = [0, 0], error_dict: dict = {}):
+    def __init__(self, required=True, length: list = [0, 0], success_dict: dict = {}, error_dict: dict = {}):
         """
         @author: SAM
         @CreateTime: 2021/6/9 14:16
@@ -40,7 +40,7 @@ class String(BaseForm):
         @desc: ''
         """
         self.STRING = '^.*$'
-        self.TEXT = '^.*$'
+        self.TEXT = '^[\s\S]*$'
         self.IP = '^((2[0-4]\d|25[0-5]|[01]?\d\d?)\.){3}(2[0-4]\d|25[0-5]|[01]?\d\d?)$'
         self.EMAIL = '^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$'
         self.PHONE = '^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$'
@@ -48,12 +48,17 @@ class String(BaseForm):
         self.length = length
         self.min_length = None
         self.max_length = None
+
+        # self.success_dict = {}
+
         self.error_dict = {}
         if error_dict:
             self.error_dict.update(error_dict)
+
         self.is_valid = False
         self.value = None
         self.error = None
+
         super(BaseForm, String).__init__(required, length, error_dict)
 
     def validate(self):
