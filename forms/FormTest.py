@@ -194,7 +194,34 @@ class MainTestForm(MainForm):
         self.name = String(label='姓名', validators=[DateRequired('Hello world!'), Length(1, 10, 'check string length.')])
 
 
-class HomeHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):
+
+    def __init__(self, application, request, **kwargs):
+        """
+        @author: SAM
+        @CreateTime: 2021/6/15 12:51
+        @UpdateTime(upf): 2021/6/15 12:51
+        @desc: ''
+        """
+        super(BaseHandler, self).__init__(application, request, **kwargs)
+
+    def ValidateForm(self, form):
+        """
+        @author: SAM
+        @CreateTime: 2021/6/15 12:53
+        @UpdateTime(upf): 2021/6/15 12:53
+        @desc: ''
+        """
+        if callable(form):
+            obj = form()
+            flag, success, error = obj.check_valid(self)
+            result = {'flag': flag, 'success': success, 'error': error}
+            if not flag:
+                self.write({'result': result})
+                raise self.on_finish()
+
+
+class HomeHandler(BaseHandler):
 
     async def get(self):
         """
@@ -203,10 +230,12 @@ class HomeHandler(tornado.web.RequestHandler):
         @UpdateTime(upf): 2021/6/10 16:42
         @desc: ''
         """
-        obj = MainTestForm()
-        flag, success, error = obj.check_valid(self)
-        result = {'flag': flag, 'success': success, 'error': error}
-        self.write({'result': result})
+        self.ValidateForm(MainTestForm)
+        self.write('test')
+        # obj = MainTestForm()
+        # flag, success, error = obj.check_valid(self)
+        # result = {'flag': flag, 'success': success, 'error': error}
+        # self.write({'result': result})
 
 
 def make_app():
