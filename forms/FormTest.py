@@ -20,25 +20,21 @@ class FieldName:
 
 class BaseForm:
 
-    def __init__(self, label: str = None, validators: list = None):  # , field_name: FieldName = None
+    def __init__(self, label: str, message=None, validators: list = None):
         """
         @author: SAM
         @CreateTime: 2021/6/10 13:19
         @UpdateTime(upf): 2021/6/10 13:19
         @desc: ''
         """
-        self.name_d = {'label': label, 'en_name': None}
         self.value = None
-        self.handler = None
+        self.field_name = FieldName()
+        self.field_name.label = label  # 不能为空
         self.flag = True
         self.success = {}
         self.error = {}
+        self.message = message  # 错误提示
         self.validators = validators
-        self.field_name = FieldName()
-        self.field_name.label = label
-        # self.field_name.en_name = None
-
-        # self.call_validators()  # 初始化不调用
 
     def check_validate(self):
         """
@@ -63,66 +59,82 @@ class BaseForm:
                 else:
                     raise Exception('This function cannot be called!')
 
+    def match_input(self, pattern):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/18 13:00
+        @UpdateTime(upf): 2021/6/18 13:00
+        @Desc: '正则匹配'
+        """
+        _pattern = re.compile(pattern)
+        _match = _pattern.match(self.value)
+        if _match:
+            self.success.update({
+                self.field_name.en_name: self.value
+            })
+        else:
+            self.flag = False
+            message = self.message if self.message else 'Matching error occurred!'
+            if self.error.get(self.field_name.en_name):
+                self.error.get(self.field_name.en_name).append(message)
+            else:
+                self.error[self.field_name.en_name] = [message]
+
 
 class String(BaseForm):
 
-    def check_validate(self, en_name=None, value=None):
+    def check_validate(self, value=None):
         """
         @author: SAM
         @CreateTime: 2021/6/10 13:20
         @UpdateTime(upf): 2021/6/10 13:20
         @desc: ''
         """
-        # self.name_d['en_name'] = en_name
         self.value = value
-        self.en_name = en_name
-        self.call_validators()  # 先执行附加条件
+        self.call_validators()  # 先执行附加条件，flag = False 不在继续执行下面方法
+        # if not self.flag:
+        #     return self
 
-        self.STRING = '^.*$'
-        self.TEXT = '^[\s\S]*$'
-
-        # 使用正则表达式 验证
-        self.check_str()  # 字符串验证
-
-        # self.success.update({
-        #     self.en_name: self.value
-        # })
+        pattern = '^.*$'
+        self.match_input(pattern)
 
         return self
-
-    def check_str(self):
-        """
-        @author: SAM
-        @CreateTime: 2021/6/17 16:26
-        @UpdateTime(upf): 2021/6/17 16:26
-        @desc: ''
-        """
-        pattern = re.compile(self.STRING)
-        _match = pattern.match(self.value)
-        if _match:
-            self.success.update({
-                self.en_name: self.value
-            })
-        else:
-            self.flag = False
-            self.error.update({
-                self.en_name: self.value,
-                'label': 'message',
-            })
 
 
 class Float(BaseForm):
 
-    def check_validate(self, en_name=None, value=None):
+    def check_validate(self, value=None):
         """
         @author: SAM
         @CreateTime: 2021/6/10 13:20
         @UpdateTime(upf): 2021/6/10 13:20
         @desc: ''
         """
-        self.name_d['en_name'] = en_name
         self.value = value
         self.call_validators()
+        if not self.flag:
+            return self
+        pattern = ''
+        self.match_input(pattern)
+        return self
+
+
+class Text(BaseForm):
+
+    def check_validate(self, value=None):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/18 14:24
+        @UpdateTime(upf): 2021/6/18 14:24
+        @Desc: ''
+        """
+        self.value = value
+        self.call_validators()
+        if not self.flag:
+            return self
+        pattern = '^[\s\S]*$'
+        self.match_input(pattern)
+        return self
 
 
 class DateRequired:
@@ -146,21 +158,11 @@ class DateRequired:
         if not cls.value:
             cls.flag = False
             message = self.message if self.message else f'{cls.field_name.label} 为必填项'
-            cls.error[cls.ield_name.en_name] = message
+            if cls.error.get(cls.field_name.en_name):
+                cls.error.get(cls.field_name.en_name).append(message)
+            else:
+                cls.error[cls.ield_name.en_name] = [message]
         return cls
-
-    # def __call__(self, cls, name_d, value):
-    #     """
-    #     @author: SAM
-    #     @CreateTime: 2021/6/10 13:27
-    #     @UpdateTime(upf): 2021/6/10 13:27
-    #     @desc: ''
-    #     """
-    #     if not value:
-    #         cls.flag = False
-    #         message = self.message if self.message else f'{name_d["label"]} 为必填项'
-    #         cls.error[name_d['en_name']] = message
-    #     return cls
 
 
 class Length:
@@ -188,11 +190,17 @@ class Length:
         if len(cls.value) < self.min_len:
             cls.flag = False
             message = self.message if self.message else f'{cls.field_name.label} 长度不足'
-            cls.error[cls.field_name.en_name] = message
+            if cls.error.get(cls.field_name.en_name):
+                cls.error.get(cls.field_name.en_name).append(message)
+            else:
+                cls.error[cls.ield_name.en_name] = [message]
         if len(cls.value) > self.max_len:
             cls.flag = False
             message = self.message if self.message else f'{cls.field_name.label} 长度超出'
-            cls.error[cls.field_name.en_name] = message
+            if cls.error.get(cls.field_name.en_name):
+                cls.error.get(cls.field_name.en_name).append(message)
+            else:
+                cls.error[cls.ield_name.en_name] = [message]
         return cls
 
 
@@ -213,12 +221,10 @@ class MainForm:
             value = handler.get_query_argument(key)
 
             validator.field_name.en_name = key
-            validator.field_name.label = '姓名'
 
-            validator.name_d['en_name'] = key
             if type(validator) is String:
                 # 此处调用校验器
-                result = validator.check_validate(en_name=key, value=value)
+                result = validator.check_validate(value=value)
 
                 if result.flag:
                     success_dict[key] = result.success[key]
