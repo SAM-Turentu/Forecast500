@@ -4,9 +4,10 @@
 # Name: Forecast500
 # Filename: Decorate
 # CreateTime: 2021/4/29 20:36
-# Summary: ''
+# Summary: '装饰器'
 
 
+from functools import wraps
 from backend.utils.BaseReturn import ReturnJson
 
 
@@ -52,24 +53,61 @@ def Return(func):
         @updateTime(upf): 2021/5/5 16:42
         """
         res = await func(self, *args, **kwargs)
-        # if not res or ('code' not in res.keys() and 'message' not in res.keys()) \
-        #         or ('error_code' not in res.keys() and 'error_message' not in res.keys()):
-        #     res = ReturnJson.SUCCESS()
-
-        if res and 'code' in res.keys():
-            ...
-        elif res and 'error_code' in res.keys():
-            ...
-        else:
+        if not res:
             res = ReturnJson.SUCCESS()
-
-        # if res and 'code' not in res.keys():  # and 'message' not in res.keys()
-        #     res = ReturnJson.SUCCESS()
-        # elif res and 'error_code' not in res.keys():  # and 'error_message' not in res.keys()
-        #     res = ReturnJson.SUCCESS()
-        # else:  # 无内容，初始化
-        #     res = ReturnJson.SUCCESS()
-
         self.json(res)
 
     return wrapper
+
+
+# todo 重置form表单，待优化
+def form_reset(form):
+    """
+    @Author: SAM
+    @CreateTime: 2021/6/24 16:30
+    @UpdateTime(upf): 2021/6/24 16:30
+    @Desc: '重置'
+    """
+    for k, v in form.__dict__.items():
+        v.error = {}
+        v.flag = True
+        v.success = {}
+        v.values = None
+
+
+def CheckFrom(form, vo):
+    """
+    @Author: SAM
+    @CreateTime: 2021/6/24 10:53
+    @UpdateTime(upf): 2021/6/24 10:53
+    @Desc: ''
+    """
+
+    def FromReturn(func):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/24 10:53
+        @UpdateTime(upf): 2021/6/24 10:53
+        @Desc: ''
+        """
+
+        @wraps(func)
+        async def from_return(handler):
+            """
+            @Author: SAM
+            @CreateTime: 2021/6/24 10:54
+            @UpdateTime(upf): 2021/6/24 10:54
+            @Desc: ''
+            """
+            form_reset(form)  # todo 重置form， 待优化
+            flag, success, error = form.check_valid(handler, vo)
+            if not flag:
+                return ReturnJson.INVALIDPARAMS(error_message='请求参数错误!', error_details=error)
+            # 将 result 存储
+            handler.form = success
+
+            return await func(handler)
+
+        return from_return
+
+    return FromReturn

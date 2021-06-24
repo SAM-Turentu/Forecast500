@@ -5,6 +5,8 @@
 # Filename: MainForm
 # CreateTime: 2021/6/9 14:15
 # Summary: ''
+
+
 from backend.utils.Utils import Utils
 from forms.BaseForm import *
 
@@ -19,12 +21,12 @@ class MainForm:
         @Desc: ''
         """
         flag = True
-        success_dict = {}  # todo 转为类
+        success_dict = {}
         error_dict = {}
 
         for key, forms in self.__dict__.items():
+            forms.field_name.en_name = key
             if type(forms) is String:
-                # values = handler.get_query_argument(key, None)  # get
                 values = handler.get_argument(key, None)  # post
             elif type(forms) is File:
                 values = handler.request.files.get(key, None)

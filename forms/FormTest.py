@@ -8,9 +8,71 @@
 
 
 import re
+from functools import wraps
 from typing import Any
 import tornado.web
 import tornado.ioloop
+
+
+def FromReturn(func):
+    """
+    @Author: SAM
+    @CreateTime: 2021/6/24 10:29
+    @UpdateTime(upf): 2021/6/24 10:29
+    @Desc: ''
+    """
+
+    @wraps(func)
+    def from_return(*args, **kwargs):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/24 10:31
+        @UpdateTime(upf): 2021/6/24 10:31
+        @Desc: ''
+        """
+        a = kwargs
+        print(func)
+        print(*args, **kwargs)
+        return func(*args, **kwargs)
+
+    return from_return
+
+
+def from_return_test(form, vo=None):
+    """
+    @Author: SAM
+    @CreateTime: 2021/6/24 10:37
+    @UpdateTime(upf): 2021/6/24 10:37
+    @Desc: ''
+    """
+
+    def fromreturn(func):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/24 10:38
+        @UpdateTime(upf): 2021/6/24 10:38
+        @Desc: ''
+        """
+
+        @wraps(func)
+        def from_return(handler):  # *args, **kwargs
+            """
+            @Author: SAM
+            @CreateTime: 2021/6/24 10:38
+            @UpdateTime(upf): 2021/6/24 10:38
+            @Desc: ''
+            """
+            # obj = RegisterForm()
+            flag, success, error = form.check_valid(handler)  # , vo
+            result = {'flag': flag, 'success': success, 'error': error}
+            if not flag:
+                return handler.write({'result': result})
+            handler.write({'result': result})
+            return func(handler)  # func(*args, **kwargs)
+
+        return from_return
+
+    return fromreturn
 
 
 class FieldName:
@@ -108,6 +170,7 @@ class String(BaseForm):
         return self
 
 
+# region Description
 class Float(BaseForm):
 
     def check_validate(self, value=None):
@@ -294,6 +357,9 @@ class FileContentLength:
         return cls
 
 
+# endregion
+
+
 class MainForm:
 
     def check_valid(self, handler):
@@ -387,6 +453,8 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class HomeHandler(BaseHandler):
 
+    # @FromReturn
+    @from_return_test(RegisterForm())
     async def get(self):
         """
         @Author: SAM
@@ -394,13 +462,14 @@ class HomeHandler(BaseHandler):
         @UpdateTime(upf): 2021/6/10 16:42
         @Desc: ''
         """
+        print('已经执行!')
         # self.ValidateForm(MainTestForm)
-        obj = RegisterForm()
-        flag, success, error = obj.check_valid(self)
-        result = {'flag': flag, 'success': success, 'error': error}
-        if not flag:
-            return self.write({'result': result})
-        self.write({'result': result})
+        # obj = RegisterForm()
+        # flag, success, error = obj.check_valid(self)
+        # result = {'flag': flag, 'success': success, 'error': error}
+        # if not flag:
+        #     return self.write({'result': result})
+        # self.write({'result': result})
 
 
 def make_app():

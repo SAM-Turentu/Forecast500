@@ -39,6 +39,13 @@ class RegisterVO(object):
         self._password = value
 
 
+class registerVO:
+    userName: str = None
+    userPhone: str = None
+    password: str = None
+
+
+# region Description
 def FormTransferVO(success_dict: dict, vo):
     """
     @Author: SAM
@@ -59,16 +66,18 @@ def main():
     @Desc: ''
     """
     success_dict = {
-        'name': 'SAM',
+        'userName': 'SAM',
         'password': 'SAM-224534',
-        'phone': '18292007162',
+        'userPhone': '18292007162',
     }
-    b = RegisterVO
+    b = registerVO()
     FormTransferVO(success_dict, b)
-    print(b.name)
+    print(b.__dict__)
+    print(b.userPhone)
+    print(b.userName)
     print(b.password)
-    print(b.phone)
 
 
 if __name__ == '__main__':
     main()
+# endregion

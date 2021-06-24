@@ -124,18 +124,6 @@ class String(BaseForm):
         self.match_input(pattern)
         return self
 
-    def check_validate(self, values=None, pattern=None):
-        """
-        @Author: SAM
-        @CreateTime: 2021/6/22 14:28
-        @UpdateTime(upf): 2021/6/22 14:28
-        @Desc: ''
-        """
-        self.values = values
-        self.call_validators()
-        self.match_input(pattern)
-        return self
-
 
 # region Description
 class Text(BaseForm):
@@ -262,7 +250,7 @@ class DataRequired:
             if cls.error.get(cls.field_name.en_name):
                 cls.error.get(cls.field_name.en_name).append(message)
             else:
-                cls.error[cls.ield_name.en_name] = [message]
+                cls.error[cls.field_name.en_name] = [message]
         return cls  # type: BaseForm
 
 
@@ -294,7 +282,7 @@ class Length:
             if cls.error.get(cls.field_name.en_name):
                 cls.error.get(cls.field_name.en_name).append(message)
             else:
-                cls.error[cls.ield_name.en_name] = [message]
+                cls.error[cls.field_name.en_name] = [message]
         if len(cls.values) > self.max_len:
             cls.flag = False
             message = self.message if self.message else f'{cls.field_name.label} 长度超出'
@@ -348,7 +336,7 @@ class NumofFile:
             if cls.error.get(cls.field_name.en_name):
                 cls.error.get(cls.field_name.en_name).append(message)
             else:
-                cls.error[cls.ield_name.en_name] = [message]
+                cls.error[cls.field_name.en_name] = [message]
         return cls
 
 
