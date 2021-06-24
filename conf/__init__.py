@@ -83,6 +83,7 @@ CONF.register_cli_opts([
     cfg.BoolOpt('debug', default=False),
     cfg.BoolOpt('autoreload', default=False),
     # cfg.StrOpt('ui_methods', default='default'),
+    cfg.IntOpt('max_buffer_size', default=1024 * 1024 * 100),
 ], settings_group)
 # endregion
 

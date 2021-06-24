@@ -7,13 +7,17 @@
 # Summary: ''
 
 
-
 class FieldName:
     label = 'asdf'
     en_name = None
 
+
 if __name__ == '__main__':
-    a = FieldName.__dict__
-    b = {key: a[key] for key in a if '__' not in key}
-    print(a)
-    print(b)
+    a = FieldName()
+    b = FieldName()
+    print(hasattr(a, 'en_name'))
+    print(hasattr(b, 'label'))
+    # if 'asdf' in a.label:
+    #     print(111)
+    # else:
+    #     print(222)

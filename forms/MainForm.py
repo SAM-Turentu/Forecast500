@@ -5,71 +5,84 @@
 # Filename: MainForm
 # CreateTime: 2021/6/9 14:15
 # Summary: ''
-
-
-from forms.BaseForm import String
+from backend.utils.Utils import Utils
+from forms.BaseForm import *
 
 
 class MainForm:
 
-    def __init__(self):
+    def check_valid(self, handler, vo):
         """
-        @author: SAM
-        @CreateTime: 2021/6/9 14:13
-        @UpdateTime(upf): 2021/6/9 14:13
-        @desc: ''
-        """
-
-    def check_valid(self, handler):
-        """
-        @author: SAM
+        @Author: SAM
         @CreateTime: 2021/6/9 14:14
         @UpdateTime(upf): 2021/6/9 14:14
-        @desc: ''
+        @Desc: ''
         """
+        flag = True
+        success_dict = {}  # todo 转为类
+        error_dict = {}
 
+        for key, forms in self.__dict__.items():
+            if type(forms) is String:
+                # values = handler.get_query_argument(key, None)  # get
+                values = handler.get_argument(key, None)  # post
+            elif type(forms) is File:
+                values = handler.request.files.get(key, None)
+            else:
+                values = handler.get_argument(key, None)
+            result = forms.validate(values=values)
+            if result.flag:
+                success_dict[key] = result.success[key]
+            else:
+                flag = False
+                error_dict[key] = result.error[key]
 
-# region Description
-class StringField(String):
+        Utils.FormTransferVO(success_dict, vo)
+        return flag, vo, error_dict
 
-    def validate(self):
-        """
-        @author: SAM
-        @CreateTime: 2021/6/9 14:16
-        @UpdateTime(upf): 2021/6/9 14:16
-        @desc: ''
-        """
-
-
-class TextField(String):
-
-    def validate(self, length: list = None):
-        """
-        @author: SAM
-        @CreateTime: 2021/6/9 15:03
-        @UpdateTime(upf): 2021/6/9 15:03
-        @desc: ''
-        """
-
-
-class PhoneField(String):
-
-    def validate(self):
-        """
-        @author: SAM
-        @CreateTime: 2021/6/9 14:18
-        @UpdateTime(upf): 2021/6/9 14:18
-        @desc: ''
-        """
-
-
-class EmailField(String):
-
-    def validate(self):
-        """
-        @author: SAM
-        @CreateTime: 2021/6/9 14:19
-        @UpdateTime(upf): 2021/6/9 14:19
-        @desc: ''
-        """
+# region Annotation
+# class StringField(String):
+#
+#     def validate(self):
+#         """
+#         @Author: SAM
+#         @CreateTime: 2021/6/9 14:16
+#         @UpdateTime(upf): 2021/6/9 14:16
+#         @Desc: ''
+#         """
+#         self.check_validate(self.value, self.STRING)
+#
+#
+# class TextField(String):
+#
+#     def validate(self, length: list = None):
+#         """
+#         @Author: SAM
+#         @CreateTime: 2021/6/9 15:03
+#         @UpdateTime(upf): 2021/6/9 15:03
+#         @Desc: ''
+#         """
+#         self.check_validate(self.value, self.TEXT)
+#
+#
+# class PhoneField(String):
+#
+#     def validate(self):
+#         """
+#         @Author: SAM
+#         @CreateTime: 2021/6/9 14:18
+#         @UpdateTime(upf): 2021/6/9 14:18
+#         @Desc: ''
+#         """
+#
+#
+# class EmailField(String):
+#
+#     def validate(self):
+#         """
+#         @Author: SAM
+#         @CreateTime: 2021/6/9 14:19
+#         @UpdateTime(upf): 2021/6/9 14:19
+#         @Desc: ''
+#         """
 # endregion

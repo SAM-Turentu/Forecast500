@@ -53,7 +53,7 @@ class BaseHandler(RequestHandler):
         """
         ...
 
-    def prepare(self) -> Optional[Awaitable[None]]:
+    def prepare(self):  # -> Optional[Awaitable[None]]
         """
         @func name: 预处理
         @desc: 在请求方式的HTTP方法前先执行

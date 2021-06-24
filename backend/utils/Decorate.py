@@ -52,9 +52,24 @@ def Return(func):
         @updateTime(upf): 2021/5/5 16:42
         """
         res = await func(self, *args, **kwargs)
-        if not res or ('code' not in res.keys() and 'message' not in res.keys()) \
-                or ('error_code' not in res.keys() and 'error_message' not in res.keys()):
+        # if not res or ('code' not in res.keys() and 'message' not in res.keys()) \
+        #         or ('error_code' not in res.keys() and 'error_message' not in res.keys()):
+        #     res = ReturnJson.SUCCESS()
+
+        if res and 'code' in res.keys():
+            ...
+        elif res and 'error_code' in res.keys():
+            ...
+        else:
             res = ReturnJson.SUCCESS()
+
+        # if res and 'code' not in res.keys():  # and 'message' not in res.keys()
+        #     res = ReturnJson.SUCCESS()
+        # elif res and 'error_code' not in res.keys():  # and 'error_message' not in res.keys()
+        #     res = ReturnJson.SUCCESS()
+        # else:  # 无内容，初始化
+        #     res = ReturnJson.SUCCESS()
+
         self.json(res)
 
     return wrapper

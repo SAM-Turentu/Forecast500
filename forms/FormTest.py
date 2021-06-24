@@ -20,7 +20,7 @@ class FieldName:
 
 class BaseForm:
 
-    def __init__(self, label: str, message=None, validators: list = None):
+    def __init__(self, label: str = None, message=None, validators: list = None):
         """
         @author: SAM
         @CreateTime: 2021/6/10 13:19
@@ -29,7 +29,7 @@ class BaseForm:
         """
         self.value = None
         self.field_name = FieldName()
-        self.field_name.label = label  # 不能为空
+        self.field_name.label = label if label else self.field_name.en_name
         self.flag = True
         self.success = {}
         self.error = {}
@@ -66,6 +66,13 @@ class BaseForm:
         @UpdateTime(upf): 2021/6/18 13:00
         @Desc: '正则匹配'
         """
+
+        if not self.value and self.value != 0:
+            self.success.update({
+                self.field_name.en_name: self.value
+            })
+            return
+
         _pattern = re.compile(pattern)
         _match = _pattern.match(self.value)
         if _match:
@@ -85,10 +92,10 @@ class String(BaseForm):
 
     def check_validate(self, value=None):
         """
-        @author: SAM
+        @Author: SAM
         @CreateTime: 2021/6/10 13:20
         @UpdateTime(upf): 2021/6/10 13:20
-        @desc: ''
+        @Desc: ''
         """
         self.value = value
         self.call_validators()  # 先执行附加条件，flag = False 不在继续执行下面方法
@@ -137,9 +144,27 @@ class Text(BaseForm):
         return self
 
 
+class Files(BaseForm):
+
+    def check_validate(self, value=None):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/21 16:48
+        @UpdateTime(upf): 2021/6/21 16:48
+        @Desc: ''
+        """
+        self.value = value
+        self.call_validators()
+        if not self.flag:
+            return self
+        pattern = ''
+        self.match_input(pattern)
+        return self
+
+
 class DateRequired:
 
-    def __init__(self, message):
+    def __init__(self, message=None):
         """
         @author: SAM
         @CreateTime: 2021/6/10 13:25
@@ -162,7 +187,7 @@ class DateRequired:
                 cls.error.get(cls.field_name.en_name).append(message)
             else:
                 cls.error[cls.ield_name.en_name] = [message]
-        return cls
+        return cls  # type: BaseForm
 
 
 class Length:
@@ -200,7 +225,72 @@ class Length:
             if cls.error.get(cls.field_name.en_name):
                 cls.error.get(cls.field_name.en_name).append(message)
             else:
-                cls.error[cls.ield_name.en_name] = [message]
+                cls.error[cls.field_name.en_name] = [message]
+        return cls
+
+
+# todo 未写完
+class NumofFile:
+
+    def __init__(self, max_files=1, min_files=1, message=None):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/21 16:51
+        @UpdateTime(upf): 2021/6/21 16:51
+        @Desc: '文件数量'
+        """
+        self.min_files = min_files  # 文件最小数
+        self.max_files = max_files  # 文件最大数
+        self.message = message
+
+    def __call__(self, cls):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/21 16:52
+        @UpdateTime(upf): 2021/6/21 16:52
+        @Desc: ''
+        """
+        if not cls.value:
+            cls.flag = False
+            message = self.message if self.message else f'缺少{cls.field_name.label}'  # 缺少文件
+        else:
+            if len(cls.value) > self.max_files:
+                message = self.message if self.message else f'{cls.field_name.label} 不能超过{self.max_files}个'  # 超过最大文件数
+            else:
+                ...
+
+        return cls
+
+
+# todo 未写完
+class FileContentLength:
+
+    def __init__(self, min_len=-1, max_len=-1, message=None):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/21 16:59
+        @UpdateTime(upf): 2021/6/21 16:59
+        @Desc: '文件大小'
+        """
+        # tornado 默认最大文件不能超过 1024 * 1024 * 100  = 100MB
+        self.max_buffer_size = 1024 * 1024 * 100  # CONF.settings.max_buffer_size
+
+        assert min_len != -1 or max_len != -1, 'At least one of `min` or `max` must be specified.'
+        assert max_len == -1 or min_len <= max_len, '`min` cannot be more than `max`.'
+        assert max_len >= self.max_buffer_size, f'max cannot be more than `max_buffer_size({self.max_buffer_size} MB)`.'
+        self.min_len = min_len
+        self.max_len = max_len
+        self.message = message
+
+    def __call__(self, cls):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/21 17:06
+        @UpdateTime(upf): 2021/6/21 17:06
+        @Desc: ''
+        """
+        if not cls.value:
+            ...
         return cls
 
 
@@ -217,31 +307,31 @@ class MainForm:
         success_dict = {}
         error_dict = {}
 
-        for key, validator in self.__dict__.items():
-            value = handler.get_query_argument(key)
+        for key, forms in self.__dict__.items():
+            forms.field_name.en_name = key
 
-            validator.field_name.en_name = key
+            if type(forms) is String:
+                value = handler.get_query_argument(key, None)  # get
+                # value = handler.get_argument(key, None)  # post
+            elif type(forms) is Files:
+                value = handler.request.files.get(key, None)
+            # elif type(forms) is ValueList: # 多值：复选框
+            #     value = handler.get_arguments(key, None)
+            else:
+                value = handler.get_argument(key, None)  # post
 
-            if type(validator) is String:
-                # 此处调用校验器
-                result = validator.check_validate(value=value)
-
-                if result.flag:
-                    success_dict[key] = result.success[key]
-                else:
-                    flag = False
-                    error_dict[key] = result.error[key]
+            # 此处调用校验器
+            result = forms.check_validate(value=value)
+            if result.flag:
+                success_dict[key] = result.success[key]
+            else:
+                flag = False
+                error_dict[key] = result.error[key]
 
         return flag, success_dict, error_dict
 
 
-class MainTestForm(MainForm):
-    """
-    @author: SAM
-    @CreateTime: 2021/6/10 13:29
-    @UpdateTime(upf): 2021/6/10 13:29
-    @desc: ''
-    """
+class RegisterForm(MainForm):
 
     def __init__(self):
         """
@@ -250,7 +340,9 @@ class MainTestForm(MainForm):
         @UpdateTime(upf): 2021/6/10 16:57
         @desc: ''
         """
-        self.name = String(label='姓名', validators=[DateRequired('Hello world!'), Length(1, 10, 'check string length.')])
+        self.name = String(label='姓名', validators=[DateRequired('姓名为必填字段'), Length(2, 10, '姓名长度为2-10位')])
+        self.age = String(label='年龄', validators=[DateRequired('年龄为必填字段'), Length(1, 3, '年龄长度为1-3位数字')])
+        self.sex = String(label='性别')
 
 
 # region Description
@@ -258,19 +350,19 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def __init__(self, application, request, **kwargs):
         """
-        @author: SAM
+        @Author: SAM
         @CreateTime: 2021/6/15 12:51
         @UpdateTime(upf): 2021/6/15 12:51
-        @desc: ''
+        @Desc: ''
         """
         super(BaseHandler, self).__init__(application, request, **kwargs)
 
     def write_error(self, status_code: int, **kwargs: Any) -> None:
         """
-        @author: SAM
+        @Author: SAM
         @CreateTime: 2021/6/16 11:06
         @UpdateTime(upf): 2021/6/16 11:06
-        @desc: ''
+        @Desc: ''
         """
         exc_cls, exc_instance, trace = kwargs.get('exc_info')
         if status_code != 200:
@@ -279,10 +371,10 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def ValidateForm(self, form):
         """
-        @author: SAM
+        @Author: SAM
         @CreateTime: 2021/6/15 12:53
         @UpdateTime(upf): 2021/6/15 12:53
-        @desc: ''
+        @Desc: ''
         """
         if callable(form):
             obj = form()
@@ -297,13 +389,13 @@ class HomeHandler(BaseHandler):
 
     async def get(self):
         """
-        @author: SAM
+        @Author: SAM
         @CreateTime: 2021/6/10 16:42
         @UpdateTime(upf): 2021/6/10 16:42
-        @desc: ''
+        @Desc: ''
         """
         # self.ValidateForm(MainTestForm)
-        obj = MainTestForm()
+        obj = RegisterForm()
         flag, success, error = obj.check_valid(self)
         result = {'flag': flag, 'success': success, 'error': error}
         if not flag:
