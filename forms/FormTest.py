@@ -292,7 +292,7 @@ class Length:
         return cls
 
 
-# todo 未写完
+# todo 文件数量限制 未写完
 class NumofFile:
 
     def __init__(self, max_files=1, min_files=1, message=None):
@@ -325,7 +325,7 @@ class NumofFile:
         return cls
 
 
-# todo 未写完
+# todo 文件大小限制 未写完
 class FileContentLength:
 
     def __init__(self, min_len=-1, max_len=-1, message=None):

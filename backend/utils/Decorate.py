@@ -8,6 +8,7 @@
 
 
 from functools import wraps
+from backend.token.Token import TOKEN
 from backend.utils.BaseReturn import ReturnJson
 
 
@@ -99,7 +100,7 @@ def CheckFrom(form, vo):
             @UpdateTime(upf): 2021/6/24 10:54
             @Desc: ''
             """
-            form_reset(form)  # todo 重置form， 待优化
+            form_reset(form)  # todo 重置form(初始化)， 待优化
             flag, success, error = form.check_valid(handler, vo)
             if not flag:
                 return ReturnJson.INVALIDPARAMS(error_message='请求参数错误!', error_details=error)
@@ -111,3 +112,32 @@ def CheckFrom(form, vo):
         return from_return
 
     return FromReturn
+
+
+# todo token校验 待完善
+def Auth(func):
+    """
+    @Author: SAM
+    @CreateTime: 2021/6/30 14:39
+    @UpdateTime(upf): 2021/6/30 14:39
+    @Desc: '需要携带token访问'
+    """
+
+    @wraps(func)
+    async def wrapper(self, *args, **kwargs):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/30 14:39
+        @UpdateTime(upf): 2021/6/30 14:39
+        @Desc: 'token校验'
+        """
+        token = self.request.headers.get('Authorization')
+        if not token:
+            raise ReturnJson.EXCEPTION(error_message='no token')
+        info = TOKEN.decode_token(token)
+        if not info:
+            raise ReturnJson.EXCEPTION(error_message='no user info')
+
+        return await func(self)
+
+    return wrapper

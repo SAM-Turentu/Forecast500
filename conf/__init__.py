@@ -87,6 +87,14 @@ CONF.register_cli_opts([
 ], settings_group)
 # endregion
 
+token_group = cfg.OptGroup('token', title='Tornado token 配置')
+CONF.register_group(token_group)
+CONF.register_cli_opts([
+    cfg.IntOpt('token_exp', default=604800),
+    cfg.StrOpt('token_algorithm', default='HS256'),
+    cfg.StrOpt('token_secret', default='secret_jwt-SAM-Turentu'),
+    cfg.StrOpt('issure', default='SAM'),
+], token_group)
 
 # 在项目启动命令中添加配置模式：开发(dev)，测试(uat)，生产(prod)
 # 项目启动命令添加下面命令，不添加则默认dev环境

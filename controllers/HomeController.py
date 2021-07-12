@@ -7,12 +7,13 @@
 # Summary: ''
 
 
-import tornado.auth
 import ast
 import json
 from backend.core.Basehandler import BaseHandler
 from backend.core.RouteHandler import Route
-from backend.utils.Decorate import Return
+from backend.token.Token import TOKEN
+from backend.utils.BaseReturn import ReturnJson
+from backend.utils.Decorate import Return, Auth
 from service.SourceDataService import SourceDataService
 
 
@@ -27,10 +28,14 @@ class HomeHandler(BaseHandler):
     """
 
     @Return
+    @Auth
     async def get(self):
         user = None
         json_dict = self.json_dict
         value = self.get_argument('value')
+        print('value: ', value)
+        # token = TOKEN.create_token(user='SAM')
+        return ReturnJson.SUCCESS(data=value)
 
         # sourceDataService = SourceDataService()
         # result = await sourceDataService.insert_source_data_service(doc)

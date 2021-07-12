@@ -27,10 +27,10 @@ class ForecastUserDO(BaseDO):
     userStatus = SmallIntegerField(default=0)
     userDisable = SmallIntegerField(default=0)
     userVIP = SmallIntegerField(default=0)
+    userSource = SmallIntegerField(default=0)
 
     class Meta:
         table_name = 'forecast_user'
-
 
 # class UserService:
 #

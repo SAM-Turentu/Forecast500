@@ -50,6 +50,8 @@ class BaseForm:
         """
         if self.validators:
             for validator in self.validators:
+                if not self.flag:
+                    break
                 if callable(validator):
                     validator(self)
                 else:
@@ -144,33 +146,37 @@ class Text(BaseForm):
 
 class Integer(BaseForm):
 
-    def validate(self, values=None):
+    def validate(self, values=None, transfer=True):
         """
         @Author: SAM
         @CreateTime: 2021/6/22 16:32
         @UpdateTime(upf): 2021/6/22 16:32
-        @Desc: ''
+        @Desc: '正负数匹配'
         """
         self.values = values
         self.call_validators()
-        pattern = ''
+        pattern = '^\-?\+?[0-9]*$'
         self.match_input(pattern)
+        if transfer:  # 默认转换为整型
+            self.values = int(self.values)
         return self
 
 
 class Float(BaseForm):
 
-    def validate(self, values=None):
+    def validate(self, values=None, transfer=True):
         """
         @Author: SAM
         @CreateTime: 2021/6/22 16:32
         @UpdateTime(upf): 2021/6/22 16:32
-        @Desc: ''
+        @Desc: '正负小数匹配'
         """
         self.values = values
         self.call_validators()
-        pattern = ''
+        pattern = '^\-?\+?[0-9]+\.[0-9]+$'
         self.match_input(pattern)
+        if transfer:  # 默认转换为浮点型
+            self.values = float(self.values)
         return self
 
 
@@ -185,8 +191,22 @@ class Bool(BaseForm):
         """
         self.values = values
         self.call_validators()
+        val = [True, 'True', 'true', False, 'False', 'false']
+        if self.values in val[0: 3]:
+            self.success.update({
+                self.field_name.en_name: True
+            })
+        elif self.values in val[3:]:
+            self.success.update({
+                self.field_name.en_name: False
+            })
+        else:
+            self.flag = False
+            self.error.update({
+                self.field_name.en_name: self.message if self.message else f'{self.field_name.label} 不是bool类型!'
+            })
         pattern = ''
-        self.match_input(pattern)
+        # self.match_input(pattern)
         return self
 
 
@@ -199,9 +219,10 @@ class DateTime(BaseForm):
         @UpdateTime(upf): 2021/6/22 16:32
         @Desc: ''
         """
+        # 2021/6/25 14:34:00
         self.values = values
         self.call_validators()
-        pattern = ''
+        pattern = '^\d{4}/\d{1,2}/\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}$'
         self.match_input(pattern)
         return self
 
@@ -217,7 +238,8 @@ class File(BaseForm):
         """
         self.values = values
         self.call_validators()
-        pattern = ''
+        # pattern = '.*[\.jpg | \.png | \.jpeg | \.mp4 | \.avi | \.doc | \.docx | \.ppt | \.pptx | \.xls | \.xlsx | \.rar | \.zip]$'
+        pattern = '.*$'
         self.match_input(pattern)
         return self
 
@@ -243,7 +265,6 @@ class DataRequired:
         @UpdateTime(upf): 2021/6/22 16:37
         @Desc: ''
         """
-        ''
         if not cls.values:
             cls.flag = False
             message = self.message if self.message else f'{cls.field_name.label} 为必填项'
@@ -293,7 +314,7 @@ class Length:
         return cls
 
 
-# todo 未完成
+# todo 限制上传文件数量 未完成
 class NumofFile:
 
     def __init__(self, min_files=1, max_files=1, message=None):
@@ -340,7 +361,7 @@ class NumofFile:
         return cls
 
 
-# todo 未完成
+# todo 长度限制 未完成
 class ContentLength:
 
     def __init__(self, min_len=-1, max_len=-1, message=None):

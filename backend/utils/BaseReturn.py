@@ -8,6 +8,7 @@
 
 # todo code 需要调整
 
+# region Description
 class BaseReturn:
 
     def __call__(self, *args, **kwargs):
@@ -83,19 +84,48 @@ class Failure(BaseReturn):
         }
 
 
-class SysException(BaseReturn):
+class HandlerException(BaseReturn):
 
-    def __call__(self, error_code=500, error_message='failure'):
+    def __call__(self, *args, **kwargs):
         """
         @Author: SAM
-        @CreateTime: 2021/6/4 14:32
-        @UpdateTime(upf): 2021/6/4 14:32
-        @Desc: '请求内部异常'
+        @CreateTime: 2021/6/30 13:23
+        @UpdateTime(upf): 2021/6/30 13:23
+        @Desc: 'BaseHandler write_error 独享'
         """
-        return {
-            'error_code': error_code,
-            'error_message': error_message,
-        }
+        if 'error_code' not in kwargs:
+            kwargs['error_code'] = 500
+        return {**kwargs}
+
+
+class BASEEXCEPTION(Exception):
+    ...
+
+
+class SysException(BASEEXCEPTION):
+
+    def __init__(self, error_code=500, error_message='system exception!'):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/30 11:02
+        @UpdateTime(upf): 2021/6/30 11:02
+        @Desc: ''
+        """
+        self.error_code = error_code
+        self.error_message = error_message
+        Exception.__init__(self, self.error_code, self.error_message)
+
+    # def __call__(self, error_code=500, error_message='failure'):
+    #     """
+    #     @Author: SAM
+    #     @CreateTime: 2021/6/4 14:32
+    #     @UpdateTime(upf): 2021/6/4 14:32
+    #     @Desc: '请求内部异常'
+    #     """
+    #     return {
+    #         'error_code': error_code,
+    #         'error_message': error_message,
+    #     }
 
 
 class BaseReturnFactory:
@@ -158,6 +188,18 @@ class NotFindReturnFactory(BaseReturnFactory):
         return NotFind()
 
 
+class HandlerExceptionReturnFactory(BaseReturnFactory):
+
+    def ret_response(self):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/30 13:24
+        @UpdateTime(upf): 2021/6/30 13:24
+        @Desc: 'BaseHandler write_error 独享'
+        """
+        return HandlerException()
+
+
 class SysExceptionReturnFactory(BaseReturnFactory):
 
     def ret_response(self):
@@ -167,7 +209,10 @@ class SysExceptionReturnFactory(BaseReturnFactory):
         @UpdateTime(upf): 2021/6/4 14:31
         @Desc: ''
         """
-        return SysException()
+        return SysException  # 不要加()，不在此处实例化
+
+
+# endregion
 
 
 class ReturnJson:
@@ -183,11 +228,10 @@ class ReturnJson:
     _failure_ret = FailureReturnFactory()
     FAILURE = _failure_ret.ret_response()
 
-    _exception_ret = FailureReturnFactory()  # 待修改
+    _exception_ret = SysExceptionReturnFactory()
     EXCEPTION = _exception_ret.ret_response()
 
-# if __name__ == '__main__':
-#     print(ReturnJson.SUCCESS(data={'name': 'Turnetu'}))
-#     print(ReturnJson.NOTFIND(message='没有找到'))
-#     print(ReturnJson.FAILURE(error_message='请求失败'))
-#     print(ReturnJson.EXCEPTION(error_message='发生错误'))
+    # region BaseHandler write_error 独享
+    _Handler_Exception = HandlerExceptionReturnFactory()
+    HANDLER_EXCEPTION = _Handler_Exception.ret_response()
+    # endregion

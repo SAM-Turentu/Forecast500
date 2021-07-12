@@ -7,13 +7,14 @@
 # Summary: ''
 
 
-import uuid
 from backend.core.Basehandler import BaseHandler
 from backend.core.RouteHandler import Route
 from backend.utils.Decorate import Return, CheckFrom
 from forms.formfield.RegisterForm import RegisterForm
+from modelobjects.ModelHelper import ModelHelper
+from modelobjects.dto.userdto.RegisterDTO import RegisterDTO
 from service.UserService import UserService
-from vo.RegisterVO import RegisterVO
+from vo.UserVO import RegisterVO
 
 
 @Route('/register')
@@ -29,13 +30,16 @@ class RegisterUserHandler(BaseHandler):
     @Return
     @CheckFrom(RegisterForm(), RegisterVO())
     async def post(self):
-        self.form: RegisterVO
-        userName = self.form.userName
-        userPhone = self.form.userPhone
-        password = self.form.password
-        userId = uuid.uuid4().__str__()
+        """
+        视图层 VO(View Object)
+
+        需要将 VO 转为 DTO(Data Transfer Object) 传递给 服务层
+        """
+        self.form: RegisterVO  # 此处转为 DTO ？？
+        dto = RegisterDTO()
         service = UserService()
-        return await service.register_user(userId=userId, userName=userName, userPhone=userPhone, password=password)
+        ModelHelper.VOTransferDTO(self.form, dto)
+        return await service.register_user(dto)
 
 
 @Route('/getUsers')

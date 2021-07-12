@@ -9,11 +9,12 @@
 
 from dao.BaseDAO import BaseDAO
 from mapper.ForecastUserDO import ForecastUserDO
+from vo.UserVO import RegisterVO
 
 
 class UserDAO(BaseDAO):
 
-    async def add_user(self, userId, userPhone, userName):
+    async def add_user(self, userPO):
         """
         @func name:
         @desc:
@@ -21,23 +22,24 @@ class UserDAO(BaseDAO):
         @createTime: 2021/5/16 18:58
         @updateTime(upf): 2021/5/16 18:58
         """
-        kw = {
-            'userId': userId,
-            'userPhone': userPhone,
-            'userName': userName,
-            'userPassword': None,
-            'userBirthday': None,
-            'userEmail': None,
-            'userSex': 1,
-            'userLoginTime': None,
-            'createTime': None,
-            'updateTime': None,
-            'userDelete': 1,
-            'userStatus': 1,
-            'userDisable': 1,
-            'userVIP': 1,
-        }
-        await self.mysql.objects.create(ForecastUserDO, **kw)
+        # todo 将服务层的 DO 转为 PO（持久化对象）
+        # kw = {
+        #     'userId': userPO.userId,
+        #     'userPhone': userPO.userPhone,
+        #     'userName': userPO.userName,
+        #     'userPassword': None,
+        #     'userBirthday': None,
+        #     'userEmail': None,
+        #     'userSex': 1,
+        #     'userLoginTime': None,
+        #     'createTime': None,
+        #     'updateTime': None,
+        #     'userDelete': 1,
+        #     'userStatus': 1,
+        #     'userDisable': 1,
+        #     'userVIP': 1,
+        # }
+        await self.mysql.objects.create(ForecastUserDO, **userPO)
 
     async def query_user_list(self):
         """
