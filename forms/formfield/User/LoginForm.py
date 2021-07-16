@@ -2,28 +2,23 @@
 # Author: SAM
 # Email: SAM-Turentu@outlook.com
 # Name: Forecast500
-# Filename: RegisterForm
-# CreateTime: 2021/6/23 11:06
+# Filename: LoginForm
+# CreateTime: 2021/7/13 15:36
 # Summary: ''
-
-
 from forms.BaseForm import *
 from forms.MainForm import MainForm
 
-"""
-表单字段 必须和 数据库字段 相同
-"""
 
-
-class RegisterForm(MainForm):
+class LoginForm(MainForm):
 
     def __init__(self):
         """
         @Author: SAM
-        @CreateTime: 2021/6/23 11:07
-        @UpdateTime(upf): 2021/6/23 11:07
+        @CreateTime: 2021/7/13 15:36
+        @UpdateTime(upf): 2021/7/13 15:36
         @Desc: ''
         """
         self.userPhone = String('手机号', validators=[DataRequired('手机号必填'), Length(11, 11, '手机号长度为11位')])
-        self.userName = String('用户名', validators=[DataRequired('姓名必填'), Length(2, 10, '用户名长度为2-10位')])
         self.userPassword = String('密码', validators=[DataRequired('密码必填'), Length(6, 16, '密码长度为6-16位')])
+        # self.SMSCode = String('验证码', validators=[DataRequired('验证码必填'), Length(6, 6, '验证码长度为6位')])
+        self.SMSCode = String('验证码')

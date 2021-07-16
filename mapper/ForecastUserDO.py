@@ -32,42 +32,10 @@ class ForecastUserDO(BaseDO):
     class Meta:
         table_name = 'forecast_user'
 
-# class UserService:
-#
-#     async def add_user(self, userId=None, userPhone=None, userName=None):
-#         """
-#         @func name:
-#         @desc:
-#         @author: SAM
-#         @createTime: 2021/5/11 22:15
-#         @updateTime(upf): 2021/5/11 22:15
-#         """
-#         userId = uuid.uuid4().__str__()
-#         userPhone = '18292007162'
-#         userName = '土人土3'
-#         kw = {
-#             'userId': userId,
-#             'userPhone': userPhone,
-#             'userName': userName,
-#             'userPassword': None,
-#             'userBirthday': None,
-#             'userEmail': None,
-#             'userSex': 1,
-#             'userLoginTime': None,
-#             'createTime': None,
-#             'updateTime': None,
-#             'userDelete': 1,
-#             'userStatus': 1,
-#             'userDisable': 1,
-#             'userVIP': 1,
-#         }
-#         await objects.create(ForecastUserDO, **kw)
-#         data = await objects.execute(ForecastUserDO.select())
-#         _ret = []
-#         for item in data:
-#             _ret.append({
-#                 'userId': item.userId,
-#                 'userPhone': item.userPhone,
-#                 'userName': item.userName,
-#             })
-#         return ReturnJson.success(data=_ret)
+    # @property
+    # def userId(self):
+    #     return self.userId
+    #
+    # @userId.setter
+    # def userId(self, value):
+    #     self.userId = value

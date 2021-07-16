@@ -10,6 +10,8 @@
 import uuid
 import datetime
 
+import pbkdf2
+
 
 class RegisterVO(object):
 
@@ -29,6 +31,15 @@ class RegisterVO(object):
         self.__userDisable = 0
         self.__userVIP = 1
         self.__userSource = 0
+
+    def _hash_password(self, password):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/13 13:59
+        @UpdateTime(upf): 2021/7/13 13:59
+        @Desc: '密码加密'
+        """
+        return pbkdf2.crypt(password, iterations=0x2537)
 
     @property
     def userId(self):
@@ -60,7 +71,7 @@ class RegisterVO(object):
 
     @userPassword.setter
     def userPassword(self, value):
-        self.__userPassword = value
+        self.__userPassword = self._hash_password(value)
 
     @property
     def userBirthday(self):

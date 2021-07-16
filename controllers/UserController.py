@@ -10,11 +10,17 @@
 from backend.core.Basehandler import BaseHandler
 from backend.core.RouteHandler import Route
 from backend.utils.Decorate import Return, CheckFrom
-from forms.formfield.RegisterForm import RegisterForm
+from forms.formfield.User.LoginForm import LoginForm
+from forms.formfield.User.RegisterForm import RegisterForm
 from modelobjects.ModelHelper import ModelHelper
+from modelobjects.dto.userdto.LoginDTO import LoginDTO
 from modelobjects.dto.userdto.RegisterDTO import RegisterDTO
+from modelobjects.vo.uservo.RegisterVO import RegisterVO
 from service.UserService import UserService
-from vo.UserVO import RegisterVO
+from modelobjects.vo.uservo.UserLoginVO import UserLoginVO
+
+
+# from vo.UserVO import RegisterVO
 
 
 @Route('/register')
@@ -39,7 +45,8 @@ class RegisterUserHandler(BaseHandler):
         dto = RegisterDTO()
         service = UserService()
         ModelHelper.VOTransferDTO(self.form, dto)
-        return await service.register_user(dto)
+        data = await service.register_user(dto)
+        return data
 
 
 @Route('/getUsers')
@@ -56,3 +63,22 @@ class getUserListHandler(BaseHandler):
     async def get(self):
         service = UserService()
         return await service.query_user_list()
+
+
+@Route('/userLogin')
+class UserLoginHandler(BaseHandler):
+    """
+    @interface name: 用户登录
+    @desc:
+    @author: SAM
+    @createTime: 2021/7/13 15:10
+    @updateTime(upf): 2021/7/13 15:10
+    """
+
+    @Return
+    @CheckFrom(LoginForm(), UserLoginVO())
+    async def post(self):
+        self.form: UserLoginVO
+        service = UserService()
+        dto = LoginDTO()
+        ModelHelper.VOTransferDTO(self.form, dto)

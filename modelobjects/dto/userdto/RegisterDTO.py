@@ -29,4 +29,5 @@ class RegisterDTO:
         self.userDelete = None
         self.userStatus = None
         self.userDisable = None
+        self.userVIP = None
         self.userSource = None

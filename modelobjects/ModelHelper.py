@@ -27,7 +27,7 @@ class ModelHelper:
             DTO.__dict__[key] = VO.__getattribute__(key) if hasattr(VO, key) else None
 
     @classmethod
-    def DTOTransferDO(cls, DTO: RegisterDTO, DO: RegisterDO):
+    def DTOTransferDO(cls, DTO, DO):
         """
         @Author: SAM
         @CreateTime: 2021/7/2 13:12

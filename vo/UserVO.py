@@ -11,9 +11,13 @@
 
 
 import datetime
+import pbkdf2
 
 
-class RegisterVO(object):
+# from pbkdf2 import PBKDF2, crypt
+
+
+class RegisterVO_Test(object):
 
     def __init__(self):
         self._userId = None
@@ -30,6 +34,28 @@ class RegisterVO(object):
         self._userStatus = 1
         self._userDisable = 0
         self._userVIP = 1
+        self._userSource = None
+
+    def _hash_password(self, password):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/13 13:59
+        @UpdateTime(upf): 2021/7/13 13:59
+        @Desc: '密码加密'
+        """
+        return pbkdf2.crypt(password, iterations=0x2537)
+
+    # def auth_password(self, pwd):
+    #     """
+    #     @Author: SAM
+    #     @CreateTime: 2021/7/13 14:30
+    #     @UpdateTime(upf): 2021/7/13 14:30
+    #     @Desc: ''
+    #     """
+    #     if self.userPassword is not None:
+    #         return self.userPassword == pbkdf2.crypt(pwd, self.userPassword)
+    #     else:
+    #         return False
 
     @property
     def userId(self):
@@ -61,7 +87,7 @@ class RegisterVO(object):
 
     @userPassword.setter
     def userPassword(self, value):
-        self._userPassword = value
+        self._userPassword = self._hash_password(value)
 
     @property
     def userBirthday(self):
@@ -135,3 +161,10 @@ class RegisterVO(object):
     def userDisable(self, value):
         self._userDisable = value
 
+    @property
+    def userSource(self):
+        return self._userSource
+
+    @userSource.setter
+    def userSource(self, value):
+        self._userSource = value

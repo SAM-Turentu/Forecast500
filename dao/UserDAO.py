@@ -9,7 +9,6 @@
 
 from dao.BaseDAO import BaseDAO
 from mapper.ForecastUserDO import ForecastUserDO
-from vo.UserVO import RegisterVO
 
 
 class UserDAO(BaseDAO):
@@ -60,3 +59,14 @@ class UserDAO(BaseDAO):
             #     'create': item['createTime'],
             # })
         return _ret
+
+    async def login(self):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/16 9:47
+        @UpdateTime(upf): 2021/7/16 9:47
+        @Desc: ''
+        """
+        data = await self.mysql.objects.execute(ForecastUserDO.select(ForecastUserDO.userPhone == '').first())
+        _ret = []
+        return data
