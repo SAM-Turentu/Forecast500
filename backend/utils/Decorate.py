@@ -141,3 +141,28 @@ def Auth(func):
         return await func(self)
 
     return wrapper
+
+
+def NotExistException(func):
+    """
+    @Author: SAM
+    @CreateTime: 2021/7/20 11:17
+    @UpdateTime(upf): 2021/7/20 11:17
+    @Desc: 'MySQL peewee_asnyc 查询记录为空时会抛 model.DoseNotExist 异常，处理后返回 None'
+    """
+
+    @wraps(func)
+    async def wrapper(self, *args, **kwargs):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/20 11:17
+        @UpdateTime(upf): 2021/7/20 11:17
+        @Desc: ''
+        """
+        try:
+            data = await func(self)
+        except:
+            data = None
+        return data
+
+    return wrapper

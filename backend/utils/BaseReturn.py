@@ -23,7 +23,7 @@ class BaseReturn:
 
 class Success(BaseReturn):
 
-    def __call__(self, code=200, message='success', data=None):
+    def __call__(self, code=200, message='success', data=None, **kwargs):
         """
         @Author: SAM
         @CreateTime: 2021/6/4 11:14
@@ -33,13 +33,14 @@ class Success(BaseReturn):
         return {
             'code': code,
             'message': message,
-            'data': data
+            'data': data,
+            **kwargs
         }
 
 
 class NotFind(BaseReturn):
 
-    def __call__(self, code=204, message='not find', data=None):
+    def __call__(self, code=204, message='not find', data=None, **kwargs):
         """
         @Author: SAM
         @CreateTime: 2021/6/4 11:14
@@ -49,13 +50,14 @@ class NotFind(BaseReturn):
         return {
             'code': code,
             'message': message,
-            'data': data
+            'data': data,
+            **kwargs
         }
 
 
 class InvalidParams(BaseReturn):
 
-    def __call__(self, error_code=400, error_message='invalid parameter', error_details: dict = {}):
+    def __call__(self, error_code=400, error_message='invalid parameter', error_details: dict = {}, **kwargs):
         """
         @Author: SAM
         @CreateTime: 2021/6/24 12:48
@@ -66,12 +68,13 @@ class InvalidParams(BaseReturn):
             'error_code': error_code,
             'error_message': error_message,
             'error_details': error_details,
+            **kwargs
         }
 
 
 class Failure(BaseReturn):
 
-    def __call__(self, error_code=500, error_message='failure'):
+    def __call__(self, error_code=500, error_message='failure', **kwargs):
         """
         @Author: SAM
         @CreateTime: 2021/6/4 11:14
@@ -81,6 +84,7 @@ class Failure(BaseReturn):
         return {
             'error_code': error_code,
             'error_message': error_message,
+            **kwargs
         }
 
 

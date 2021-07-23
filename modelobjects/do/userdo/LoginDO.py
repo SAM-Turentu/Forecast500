@@ -7,7 +7,11 @@
 # Summary: ''
 
 
+from backend.utils.Paginate import Pagination
+
+
 class LoginDO:
+
     def __init__(self):
         """
         @Author: SAM
@@ -15,6 +19,116 @@ class LoginDO:
         @UpdateTime(upf): 2021/7/14 10:26
         @Desc: ''
         """
+
         self.userPhone = None
         self.userPassword = None
         self.SMSCode = None
+
+        self.userId = None
+        self.userName = None
+        self.userBirthday = None
+        self.userEmail = None
+        self.userSex = None
+        self.userLoginTime = None
+        self.userDelete = None
+        self.userStatus = None
+        self.userDisable = None
+        self.userVIP = None
+        self.userSource = None
+
+
+class LoginInputDO:
+
+    def __init__(self):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/21 13:03
+        @UpdateTime(upf): 2021/7/21 13:03
+        @Desc: ''
+        """
+        self.userPhone = None
+        self.userPassword = None
+        self.SMSCode = None
+
+        # self.userId = None
+        # self.userName = None
+        # self.userBirthday = None
+        # self.userEmail = None
+        # self.userSex = None
+        # self.userLoginTime = None
+        # self.userDelete = None
+        # self.userStatus = None
+        # self.userDisable = None
+        # self.userVIP = None
+        # self.userSource = None
+
+
+class OutputListDO(object):
+
+    def __init__(self):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/23 16:24
+        @UpdateTime(upf): 2021/7/23 16:24
+        @Desc: ''
+        """
+        self.data = []
+        self.DO = None
+
+
+class OutputDictDO(object):
+
+    def __init__(self):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/23 16:25
+        @UpdateTime(upf): 2021/7/23 16:25
+        @Desc: ''
+        """
+        self.data = {}
+        self.DO = None
+
+
+class LoginOutput(OutputListDO):
+    """
+    登录信息输出
+    """
+
+    def __init__(self):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/23 11:07
+        @UpdateTime(upf): 2021/7/23 11:07
+        @Desc: ''
+        """
+        # self.login_data = []  # peewee query data is not class-object !!!
+        self.DO = LoginOutputDO()
+        self.pagination = Pagination()
+        super(LoginOutput, self).__init__()
+
+
+class LoginOutputDO:
+
+    def __init__(self):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/21 13:03
+        @UpdateTime(upf): 2021/7/21 13:03
+        @Desc: '登录输出信息'
+        """
+        # self.data = []
+        self.userPhone = None
+        # self.userPassword = None  # 输出 DO 不显示密码
+        self.SMSCode = None
+
+        self.userId = None
+        self.userName = None
+        self.userBirthday = None
+        self.userEmail = None
+        self.userSex = None
+        self.userLoginTime = None
+        # self.userDelete = None
+        self.userStatus = None
+        self.userDisable = None
+        self.userVIP = None
+        self.userSource = None

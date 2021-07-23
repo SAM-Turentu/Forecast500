@@ -82,3 +82,5 @@ class UserLoginHandler(BaseHandler):
         service = UserService()
         dto = LoginDTO()
         ModelHelper.VOTransferDTO(self.form, dto)
+        service = UserService()
+        return await service.user_login(dto)
