@@ -57,3 +57,15 @@ class Utils(object):
         @desc: '获取当前日期 - 时间'
         """
         return datetime.now()
+
+    @staticmethod
+    def FormTransferVO(success_dict: dict, vo):
+        """
+        @Author: SAM
+        @CreateTime: 2021/6/23 13:42
+        @UpdateTime(upf): 2021/6/23 13:42
+        @Desc: 'form 转换为 vo'
+        """
+        for k, v in success_dict.items():
+            vo.__setattr__(k, success_dict[k])
+        return vo

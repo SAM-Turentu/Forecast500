@@ -5,9 +5,10 @@
 # Filename: SourceDataService
 # CreateTime: 2021/4/29 21:19
 # Summary: ''
-import json
 
-from backend.utils.Result import ReturnJson
+
+import json
+from backend.utils.BaseReturn import ReturnJson
 from dao.SoruceDataDAO import SourceDataDAO
 from service.BaseService import BaseService
 
@@ -33,7 +34,7 @@ class SourceDataService(BaseService):
         @updateTime(upf): 2021/4/29 21:21
         """
         await self.sourceDataDAO.insert_data(data)
-        return ReturnJson.success()
+        return ReturnJson.SUCCESS()
 
     async def withdraw_data_from_txt(self, data):
         """
@@ -56,7 +57,7 @@ class SourceDataService(BaseService):
             'blue': data[7],
         }
         _ret = await self.sourceDataDAO.insert_data(_insert)
-        return ReturnJson.success(data=data)
+        return ReturnJson.SUCCESS(data=data)
 
     # region Award Function
     async def insert_first_award(self, data):
@@ -173,8 +174,4 @@ class SourceDataService(BaseService):
         print(red_length)
         print(blue_dict)
         print(blue_length)
-        # return ReturnJson.success(data=json.dumps(_ret))
-        return ReturnJson.success(data=json.dumps(red_dict))
-
-
-
+        return ReturnJson.SUCCESS(data=json.dumps(red_dict))

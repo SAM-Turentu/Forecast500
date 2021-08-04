@@ -12,7 +12,8 @@ from asyncio import Future
 from typing import Optional, Awaitable, Union, Any
 from tornado.web import RequestHandler
 
-from backend.utils.Result import ReturnJson
+from backend.core.Authentication import Authentication
+from backend.utils.BaseReturn import ReturnJson
 from backend.utils.Utils import Utils
 
 
@@ -39,7 +40,6 @@ class BaseHandler(RequestHandler):
         @updateTime(upf): 2021/5/6 19:41
         """
         self.set_header('Access-Control-Allow-Origin', '*')
-        # self.set_header('Access-Control-Allow-Origin', 'http://www.forecast500.com/')
         self.set_header('Access-Control-Allow-Headers', 'x-requested-with')
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
 
@@ -53,7 +53,7 @@ class BaseHandler(RequestHandler):
         """
         ...
 
-    def prepare(self) -> Optional[Awaitable[None]]:
+    def prepare(self):  # -> Optional[Awaitable[None]]
         """
         @func name: 预处理
         @desc: 在请求方式的HTTP方法前先执行
@@ -62,11 +62,13 @@ class BaseHandler(RequestHandler):
         @updateTime(upf): 2021/5/5 17:02
         """
         content_type = self.request.headers.get('Content-Type', '')
-        user_agent = self.request.headers.get('User-Agent')
+        user_agent = self.request.headers.get('userdto-Agent')
         if content_type.startswith('application/json'):
             self.json_dict = json.loads(self.request.body)
 
         token = self.request.headers.get('Authorization')
+        # auth = Authentication()
+        # auth.authenticate(self)
         # 处理token 权限判断等，请求方法前的一些处理
 
     def write_error(self, status_code: int, **kwargs: Any) -> None:
@@ -80,7 +82,10 @@ class BaseHandler(RequestHandler):
         exc_cls, exc_instance, trace = kwargs.get('exc_info')
         if status_code != 200:
             self.set_status(status_code)
-            self.write(ReturnJson.exception(message=exc_instance))
+            if hasattr(exc_instance, 'error_code'):
+                self.write(ReturnJson.HANDLER_EXCEPTION(**exc_instance.__dict__))
+            else:
+                self.write(ReturnJson.HANDLER_EXCEPTION(error_message=exc_instance.__str__()))
 
     def on_finish(self) -> None:
         """
