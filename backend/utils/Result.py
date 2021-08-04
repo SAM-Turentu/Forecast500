@@ -110,121 +110,179 @@ ReturnJson = Result()
 #     print(ReturnJson.notFind(message='Hello World! Not Find', code=404))
 
 
-class IReturn:
+# class IReturn:
+#
+#     def __init__(self, code=None, message=None, data=None, error_code=None, error_message=None):
+#         """
+#         @author: SAM
+#         @CreateTime: 2021/6/3 16:43
+#         @UpdateTime(upf): 2021/6/3 16:43
+#         @desc: ''
+#         """
+#         self.code = code
+#         self.message = message
+#         self.data = data
+#         self.error_code = error_code
+#         self.error_message = error_message
+#
+#     def GetReturn(self):
+#         """
+#         @author: SAM
+#         @CreateTime: 2021/6/3 17:03
+#         @UpdateTime(upf): 2021/6/3 17:03
+#         @desc: ''
+#         """
+#         # return {
+#         #     'code': self.code,
+#         #     'message': self.message,
+#         #     'data': self.data,
+#         # }
+#         ...
+#
+#     def GetErrorReturn(self):
+#         """
+#         @author: SAM
+#         @CreateTime: 2021/6/3 17:04
+#         @UpdateTime(upf): 2021/6/3 17:04
+#         @desc: ''
+#         """
+#         # return {
+#         #     'error_code': self.error_code,
+#         #     'error_message': self.error_message,
+#         # }
+#         ...
 
-    def __init__(self, code=None, message=None, data=None, error_code=None, error_message=None):
-        """
-        @author: SAM
-        @CreateTime: 2021/6/3 16:43
-        @UpdateTime(upf): 2021/6/3 16:43
-        @desc: ''
-        """
-        self.code = code
-        self.message = message
-        self.data = data
-        self.error_code = error_code
-        self.error_message = error_message
 
-    def GetReturn(self):
+# class Return(IReturn):
+#
+#     def GetReturn(self):
+#         """
+#         @author: SAM
+#         @CreateTime: 2021/6/3 17:11
+#         @UpdateTime(upf): 2021/6/3 17:11
+#         @desc: ''
+#         """
+#         return {
+#             'code': self.code,
+#             'message': self.message,
+#             'data': self.data,
+#         }
+
+
+class RetResponse:
+
+    def ret_response(self):
         """
+        @func name:
+        @desc:
         @author: SAM
-        @CreateTime: 2021/6/3 17:03
-        @UpdateTime(upf): 2021/6/3 17:03
-        @desc: ''
+        @createTime: 2021/6/3 19:39
+        @updateTime(upf): 2021/6/3 19:39
         """
-        # return {
-        #     'code': self.code,
-        #     'message': self.message,
-        #     'data': self.data,
-        # }
         ...
 
-    def GetErrorReturn(self):
+
+class Success(RetResponse):
+
+    def ret_response(self, code=None, message=None, data=None):
         """
+        @func name:
+        @desc:
         @author: SAM
-        @CreateTime: 2021/6/3 17:04
-        @UpdateTime(upf): 2021/6/3 17:04
-        @desc: ''
+        @createTime: 2021/6/3 19:37
+        @updateTime(upf): 2021/6/3 19:37
         """
-        # return {
-        #     'error_code': self.error_code,
-        #     'error_message': self.error_message,
-        # }
-        ...
-
-
-class Return(IReturn):
-
-    def GetReturn(self):
-        """
-        @author: SAM
-        @CreateTime: 2021/6/3 17:11
-        @UpdateTime(upf): 2021/6/3 17:11
-        @desc: ''
-        """
+        # self.code = code if code else 200
+        # self.message = message if message else 'success'
+        # self.data = data
         return {
-            'code': self.code,
-            'message': self.message,
-            'data': self.data,
+            'code': code if code else 200,
+            'message': message if message else 'success',
+            'data': data,
         }
 
 
-class ISuccess:
+class NotFind(RetResponse):
 
-    def __init__(self):
+    def ret_response(self):
         """
+        @func name:
+        @desc:
         @author: SAM
-        @CreateTime: 2021/6/3 17:12
-        @UpdateTime(upf): 2021/6/3 17:12
-        @desc: ''
-        """
-        ...
-
-
-class Success(ISuccess):
-
-    def success(self):
-        """
-        @author: SAM
-        @CreateTime: 2021/6/3 17:13
-        @UpdateTime(upf): 2021/6/3 17:13
-        @desc: ''
-        """
-        self.code = 200
-        self.message = 'success'
-        self.data = None
-
-    def notFind(self):
-        """
-        @author: SAM
-        @CreateTime: 2021/6/3 17:14
-        @UpdateTime(upf): 2021/6/3 17:14
-        @desc: ''
+        @createTime: 2021/6/3 19:38
+        @updateTime(upf): 2021/6/3 19:38
         """
         self.code = 204
         self.message = 'not find'
         self.data = None
 
 
-class IFailure:
+class Failure(RetResponse):
 
-    def __init__(self):
+    def ret_response(self, error_code=500, error_message='exception'):
         """
+        @func name:
+        @desc:
         @author: SAM
-        @CreateTime: 2021/6/3 17:15
-        @UpdateTime(upf): 2021/6/3 17:15
-        @desc: ''
+        @createTime: 2021/6/3 19:39
+        @updateTime(upf): 2021/6/3 19:39
         """
+        # self.error_code = 500
+        # self.error_message = 'exception'
+        return {
+            'error_code': error_code,
+            'error_message': error_message,
+        }
 
 
-class Failure(IFailure):
-
-    def exception(self):
+class Return:
+    def __init__(self, temp):
         """
+        @func name:
+        @desc:
         @author: SAM
-        @CreateTime: 2021/6/3 17:16
-        @UpdateTime(upf): 2021/6/3 17:16
-        @desc: ''
+        @createTime: 2021/6/3 19:53
+        @updateTime(upf): 2021/6/3 19:53
         """
-        self.error_code = 500
-        self.error_message = 'exception'
+        self.temp = temp
+
+    def __call__(self, code=200, message='', data=None):
+        """
+        @func name:
+        @desc:
+        @author: SAM
+        @createTime: 2021/6/3 20:21
+        @updateTime(upf): 2021/6/3 20:21
+        """
+        return {
+            'code': code,
+            'message': message,
+            'data': data,
+        }
+
+    def GetReturn(self, code=None, message=None, data=None):
+        """
+        @func name:
+        @desc:
+        @author: SAM
+        @createTime: 2021/6/3 19:54
+        @updateTime(upf): 2021/6/3 19:54
+        """
+        a = self.temp.ret_response(code=code)
+        return a
+
+
+# ret = Return(Success())
+# ret2 = Return(NotFind())
+# ret3 = Return(Failure())
+# print(ret.GetReturn(200))
+# print(ret2.GetReturn(204))
+# print(ret3.GetReturn(500))
+
+if __name__ == '__main__':
+    ret = Return(Success())
+    ret2 = Return(NotFind())
+    ret3 = Return(Failure())
+    print(ret)
+    a = ret3.GetReturn()
+    print(a)
