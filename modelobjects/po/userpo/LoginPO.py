@@ -14,7 +14,7 @@ class LoginPO:
         @Author: SAM
         @CreateTime: 2021/7/14 10:25
         @UpdateTime(upf): 2021/7/14 10:25
-        @Desc: ''
+        @Desc: '持久化对象'
         """
         self.userPhone = None
         self.userPassword = None

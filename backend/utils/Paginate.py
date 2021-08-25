@@ -34,3 +34,39 @@ class Pagination:
         pages, tmp = divmod(self.total, self.col)
         self.pages = pages + 1 if tmp > 0 else pages
 
+    def __call__(self, *args, **kwargs):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/28 10:56
+        @UpdateTime(upf): 2021/7/28 10:56
+        @Desc: ''
+        """
+        return {'page': self.page, 'pages': self.pages, 'col': self.col, 'total': self.total}
+
+
+class SAM:
+
+    def __init__(self):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/28 11:07
+        @UpdateTime(upf): 2021/7/28 11:07
+        @Desc: ''
+        """
+        self.paginate = Pagination()()
+
+
+def main():
+    """
+    @Author: SAM
+    @CreateTime: 2021/7/28 11:07
+    @UpdateTime(upf): 2021/7/28 11:07
+    @Desc: ''
+    """
+    sam = SAM()
+    a = sam.paginate
+    print(a)
+
+
+if __name__ == '__main__':
+    main()
