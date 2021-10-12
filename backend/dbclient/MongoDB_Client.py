@@ -36,7 +36,7 @@ class MongoDBClient(object):
         """
         self.client = motor.motor_tornado.MotorClient(host, port)
         self.database = self.client.Forecast500
-        self.collection = self.database.BallData
+        self.collection = self.database.union_lotto
         # self.BallData = self.database.BallData
 
     # async def SAM_Insert_Test(self):

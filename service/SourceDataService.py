@@ -36,29 +36,6 @@ class SourceDataService(BaseService):
         await self.sourceDataDAO.insert_data(data)
         return ReturnJson.SUCCESS()
 
-    async def withdraw_data_from_txt(self, data):
-        """
-        @func name:
-        @desc:
-        @author: SAM
-        @createTime: 2021/5/6 20:58
-        @updateTime(upf): 2021/5/6 20:58
-        """
-        _insert = {
-            'term': data[0],
-            'ball': list(data[1:]),
-            'red_ball': list(data[1:-1]),
-            'red_1': data[1],
-            'red_2': data[2],
-            'red_3': data[3],
-            'red_4': data[4],
-            'red_5': data[5],
-            'red_6': data[6],
-            'blue': data[7],
-        }
-        _ret = await self.sourceDataDAO.insert_data(_insert)
-        return ReturnJson.SUCCESS(data=data)
-
     # region Award Function
     async def insert_first_award(self, data):
         """

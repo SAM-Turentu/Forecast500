@@ -48,32 +48,6 @@ class HomeHandler(BaseHandler):
         # return ReturnJson.SUCCESS(data=result)
 
 
-@Route('/home')
-class WithDrawHandler(BaseHandler):
-    """
-    @interface name:
-    @desc:
-    @author: SAM
-    @createTime: 2021/5/6 20:59
-    @updateTime(upf): 2021/5/6 20:59
-    """
-
-    @Return
-    async def get(self):
-        sourceService = SourceDataService()
-        read_line = None
-        with open('D:\Projects\Python\Local\Forecast500\statics\win_num.txt', 'r') as f:
-            file = f.readlines()
-            # item = file[0]
-            # item = tuple(int(x) for x in ast.literal_eval(item))
-            # ret = await sourceService.withdraw_data_from_txt(item)
-            for item in file:
-                item = tuple(int(x) for x in ast.literal_eval(item))
-                await sourceService.withdraw_data_from_txt(item)
-        print('ret: ', '上传处理成功!')
-        return self.write(json.dumps({'ret: ', '上传处理成功!'}))
-
-
 @Route('/all')
 class FindAllDataHandler(BaseHandler):
     """
