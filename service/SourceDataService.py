@@ -126,29 +126,4 @@ class SourceDataService(BaseService):
         @updateTime(upf): 2021/5/7 19:15
         """
         all_data = await self.sourceDataDAO.query_all_data()
-        # item = await all_data.to_list(length=5000)
-        _ret = []
-        red_dict = {}
-        blue_dict = {}
-        for item in await all_data.to_list(length=5000):
-            item.pop('_id')
-            red_ball_list = item.get('red_ball')
-            for i in red_ball_list:
-                red_dict.setdefault(i, 0)
-                red_dict[i] += 1
-
-            blue_ball = item.get('blue')
-            blue_dict.setdefault(blue_ball, 0)
-            blue_dict[blue_ball] += 1
-
-            _ret.append(item)
-
-        red_length = sum(red_dict.values())
-        blue_length = sum(blue_dict.values())
-        red_dict = dict(sorted(red_dict.items()))
-        blue_dict = dict(sorted(blue_dict.items()))
-        print(red_dict)
-        print(red_length)
-        print(blue_dict)
-        print(blue_length)
-        return ReturnJson.SUCCESS(data=json.dumps(red_dict))
+        return ReturnJson.SUCCESS(data=all_data)

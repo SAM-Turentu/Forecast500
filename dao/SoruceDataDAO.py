@@ -20,8 +20,8 @@ class SourceDataDAO(BaseDAO):
         @createTime: 2021/5/6 21:19
         @updateTime(upf): 2021/5/6 21:19
         """
-        return await self.mongodb.collection.insert_one(data)
-    
+        return await self.mongodb.union_lotto.insert_one(data)
+
     async def query_all_data(self):
         """
         @func name: 
@@ -30,5 +30,11 @@ class SourceDataDAO(BaseDAO):
         @createTime: 2021/5/6 22:33
         @updateTime(upf): 2021/5/6 22:33
         """
-        data = self.mongodb.collection.find()
-        return data
+        _ret = []
+        data = self.mongodb.union_lotto.find()
+        docs = await data.to_list(length=10)
+        for item in docs:
+            del item['_id']
+            _ret.append(item)
+        document = await self.mongodb.union_lotto.find_one({"term_number": "21040"})
+        return _ret

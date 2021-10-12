@@ -35,8 +35,8 @@ class MongoDBClient(object):
         @updateTime(upf): 2021/4/27 21:38
         """
         self.client = motor.motor_tornado.MotorClient(host, port)
-        self.database = self.client.Forecast500
-        self.collection = self.database.union_lotto
+        self.database = self.client.forecast500  # 与mongodb 保持一直（大小写）
+        self.union_lotto = self.database.union_lotto
         # self.BallData = self.database.BallData
 
     # async def SAM_Insert_Test(self):
