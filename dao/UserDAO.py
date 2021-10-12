@@ -50,16 +50,11 @@ class UserDAO(BaseDAO):
         @createTime: 2021/5/16 20:12
         @updateTime(upf): 2021/5/16 20:12
         """
-        data = await self.mysql.objects.execute(ForecastUserModel.select().dicts())
+        data = await self.mysql.objects.execute(ForecastUserModel.select().paginate(1, 1).dicts())
         _ret = []
+        # counts = data.__dict__.get('_result_wrapper').__dict__.get('count')
         for item in data:
             _ret.append(item)
-            # _ret.append({
-            #     'userId': item['userId'],
-            #     'userPhone': item['userPhone'],
-            #     'userName': item['userName'],
-            #     'create': item['createTime'],
-            # })
         return _ret
 
     # @NotExistException
@@ -75,7 +70,7 @@ class UserDAO(BaseDAO):
         ).dicts())
         return data
 
-    @NotExistException
+    # @NotExistException
     async def query_user_by_phone(self, loginPO):
         """
         @Author: SAM

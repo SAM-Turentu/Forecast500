@@ -50,18 +50,6 @@ class LoginInputDO:
         self.userPassword = None
         self.SMSCode = None
 
-        # self.userId = None
-        # self.userName = None
-        # self.userBirthday = None
-        # self.userEmail = None
-        # self.userSex = None
-        # self.userLoginTime = None
-        # self.userDelete = None
-        # self.userStatus = None
-        # self.userDisable = None
-        # self.userVIP = None
-        # self.userSource = None
-
 
 class OutputListDO(object):
 
@@ -70,10 +58,11 @@ class OutputListDO(object):
         @Author: SAM
         @CreateTime: 2021/7/23 16:24
         @UpdateTime(upf): 2021/7/23 16:24
-        @Desc: ''
+        @Desc: '输出 list 基类'
         """
         self.data = []
-        self.DO = None
+        self.DO = self.DO if self.DO else None
+        self.pagination = self.pagination if self.pagination else Pagination()()
 
 
 class OutputDictDO(object):
@@ -83,13 +72,13 @@ class OutputDictDO(object):
         @Author: SAM
         @CreateTime: 2021/7/23 16:25
         @UpdateTime(upf): 2021/7/23 16:25
-        @Desc: ''
+        @Desc: '输出 dict 基类'
         """
         self.data = {}
-        self.DO = None
+        self.DO = self.DO if self.DO else None
 
 
-class LoginOutput(OutputListDO):
+class LoginOutputList(OutputListDO):
     """
     登录信息输出
     """
@@ -102,14 +91,29 @@ class LoginOutput(OutputListDO):
         @Desc: ''
         """
         # self.login_data = []  # peewee query data is not class-object !!!
+
+        # todo 未完成
         self.DO = LoginOutputDO()
-        self.pagination = Pagination()
-        super(LoginOutput, self).__init__()
+        self.pagination = Pagination()()
+        super(LoginOutputList, self).__init__()
+
+
+class LoginOutputDict(OutputDictDO):
+
+    def __init__(self):
+        """
+        @Author: SAM
+        @CreateTime: 2021/7/27 16:04
+        @UpdateTime(upf): 2021/7/27 16:04
+        @Desc: ''
+        """
+        self.DO = LoginOutputDO()
+        super(LoginOutputDict, self).__init__()
 
 
 class LoginOutputDO:
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         @Author: SAM
         @CreateTime: 2021/7/21 13:03
@@ -119,7 +123,6 @@ class LoginOutputDO:
         # self.data = []
         self.userPhone = None
         # self.userPassword = None  # 输出 DO 不显示密码
-        self.SMSCode = None
 
         self.userId = None
         self.userName = None

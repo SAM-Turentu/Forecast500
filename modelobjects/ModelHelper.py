@@ -7,7 +7,7 @@
 # Summary: ''
 import time
 
-from modelobjects.do.userdo.LoginDO import LoginDO, LoginOutput
+from modelobjects.do.userdo.LoginDO import LoginDO, LoginOutputDO, LoginOutputList, LoginOutputDict
 from modelobjects.do.userdo.RegisterDO import RegisterDO
 from modelobjects.dto.userdto.RegisterDTO import RegisterDTO
 from modelobjects.vo.uservo.RegisterVO import RegisterVO
@@ -52,7 +52,7 @@ class ModelHelper:
                 PO.__dict__[k] = v
 
     @classmethod
-    def DataTransferDO(cls, QueryData, DO: LoginOutput):
+    def DataTransferDO(cls, data, DO: LoginOutputList):  # QueryData
         """
         @Author: SAM
         @CreateTime: 2021/7/20 14:59
@@ -61,13 +61,14 @@ class ModelHelper:
         """
         # 调用 LoginOutput
 
-        if type(QueryData) is list:
-            for item in QueryData:
+        if type(data) is list:
+            for item in data:
                 item_ret = []
                 for k, v in item.items():
                     if k in DO.DO.__dict__:
                         item_ret.append((k, v))
-                DO.data.append(item_ret)
+                DO.data.append(dict(item_ret))
+            delattr(DO, 'DO')
 
         # 调用 LoginOutputDO
 

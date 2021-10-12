@@ -11,7 +11,7 @@ import uuid
 from backend.utils.BaseReturn import ReturnJson
 from dao.UserDAO import UserDAO
 from modelobjects.ModelHelper import ModelHelper
-from modelobjects.do.userdo.LoginDO import LoginDO, LoginOutputDO
+from modelobjects.do.userdo.LoginDO import LoginDO, LoginInputDO, LoginOutputDO, LoginOutputList, LoginOutputDict
 from modelobjects.po.userpo.LoginPO import LoginPO
 from modelobjects.do.userdo.RegisterDO import RegisterDO
 from modelobjects.dto.userdto.LoginDTO import LoginDTO
@@ -109,27 +109,27 @@ class UserService(BaseService):
         @CreateTime: 2021/7/13 16:47
         @UpdateTime(upf): 2021/7/13 16:47
         @Desc: ''
+        :params: dto:
         """
 
-        loginDO = LoginDO()
-        ModelHelper.DTOTransferDO(dto, loginDO)
+        loginInputDO = LoginInputDO()
+        ModelHelper.DTOTransferDO(dto, loginInputDO)
 
         SMSCode = '101010'  # redis:sms_code
 
-        if loginDO.SMSCode != SMSCode and loginDO.SMSCode != '':
+        if loginInputDO.SMSCode != SMSCode and loginInputDO.SMSCode != '':
             return ReturnJson.FAILURE(error_message='请填写正确的验证码!')
-
-        if loginDO.userPassword:
-            ...
 
         loginPO = LoginPO()
 
-        ModelHelper.DOTransferPO(loginDO, loginPO)
+        ModelHelper.DOTransferPO(loginInputDO, loginPO)  # 转换为持久化对象
 
-        _ret = await self.userDAO.login(loginPO)
+        # _ret = await self.userDAO.login(loginPO)  # 使用持久化对象查询数据库
 
+        # region 账号检查
         # 检查账号是否存在
-        is_user = await self.userDAO.login(loginPO)
+        # is_user = await self.userDAO.login(loginPO)
+        is_user = await self.userDAO.query_user_by_phone(loginPO)
         if not is_user:
             # 用户不存在
             # todo 用户若不存在，可直接注册（注册登录合并？）？
@@ -140,15 +140,17 @@ class UserService(BaseService):
         if not is_password:
             # 密码不正确
             return ReturnJson.FAILURE(error_message='密码不正确，请重新输入!')
+        # endregion
 
-        # 测试
-        # _ret = await self.userDAO.query_user_list()
+        # todo 测试 返回 list 数据 未完成
+        _ret = await self.userDAO.query_user_list()
 
-        loginOutputDO = LoginOutputDO()
+        data = LoginOutputList()  # todo 未完成  返回 list 数据测试
+        # data = LoginOutputDict()  # todo 未完成  返回 dict 数据测试
 
         # is_user 转换为 DO
-        ModelHelper.DataTransferDO(_ret, loginOutputDO)
-        # ModelHelper.DataTransferDO(is_user, loginDO)
+        ModelHelper.DataTransferDO(_ret, data)
+        # ModelHelper.DataTransferDO(is_user, loginInputDO)
 
         # 0:'隐匿'; 1:'男', '先生', '帅哥', '小伙子'; 2:'女', '女士', '美女', '小姑娘'
         # loginDO.userSex = '帅哥' if is_user.userSex == 1 else '美女' if is_user.userSex == 2 else '隐匿'
@@ -165,5 +167,5 @@ class UserService(BaseService):
         # loginDO.userDisable = is_user.userDisable
         # loginDO.userVIP = is_user.userVIP
         # loginDO.userSource = is_user.userSource
-
-        return ReturnJson.SUCCESS(data=loginOutputDO.data)
+        print(data.__dict__)
+        return ReturnJson.SUCCESS(data=data.__dict__)
