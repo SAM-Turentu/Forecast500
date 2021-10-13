@@ -37,7 +37,6 @@ class MongoDBClient(object):
         self.client = motor.motor_tornado.MotorClient(host, port)
         self.database = self.client.forecast500  # 与mongodb 保持一直（大小写）
         self.union_lotto = self.database.union_lotto
-        # self.BallData = self.database.BallData
 
     # async def SAM_Insert_Test(self):
     #     """

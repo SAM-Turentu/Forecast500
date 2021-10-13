@@ -32,9 +32,5 @@ class SourceDataDAO(BaseDAO):
         """
         _ret = []
         data = self.mongodb.union_lotto.find()
-        docs = await data.to_list(length=10)
-        for item in docs:
-            del item['_id']
-            _ret.append(item)
-        document = await self.mongodb.union_lotto.find_one({"term_number": "21040"})
-        return _ret
+        data_length = await self.mongodb.union_lotto.count_documents({})  # 按条件查询 collection 总数据量
+        return data, data_length

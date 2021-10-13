@@ -143,6 +143,20 @@ class BaseReturnFactory:
         """
         ...
 
+    # todo 删除 MongoDB 中的 _id
+    def ___remove_mongodb_object_id(self, data_source=False):
+        """
+        删除 MongoDB 中的 _id
+        data_source: False: 非mongodb，True：数据来自mongodb 必须删除 _id
+        """
+        if data_source:
+            data_type = type(self.data)
+            if data_type == list:
+                for item in self.data:
+                    del item['_id']
+            if data_type == dict:
+                del self.data['_id']
+
 
 class SuccessReturnFactory(BaseReturnFactory):
 

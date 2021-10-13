@@ -125,5 +125,11 @@ class SourceDataService(BaseService):
         @createTime: 2021/5/7 19:15
         @updateTime(upf): 2021/5/7 19:15
         """
-        all_data = await self.sourceDataDAO.query_all_data()
-        return ReturnJson.SUCCESS(data=all_data)
+        _ret = []
+        all_data, all_data_len = await self.sourceDataDAO.query_all_data()
+        for item in await all_data.to_list(length=10):
+            del item['_id']  # todo 在 ReturnJson 类中处理
+            _ret.append(item)
+        _ret.append(all_data_len)
+        print(_ret)
+        return ReturnJson.SUCCESS(data=_ret)
