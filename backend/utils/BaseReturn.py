@@ -8,7 +8,7 @@
 
 # todo code 需要调整
 
-# region Description
+# region BaseReturn
 class BaseReturn:
 
     def __call__(self, *args, **kwargs):
@@ -102,6 +102,10 @@ class HandlerException(BaseReturn):
         return {**kwargs}
 
 
+# endregion
+
+
+# region System Exception
 class BASEEXCEPTION(Exception):
     ...
 
@@ -132,6 +136,10 @@ class SysException(BASEEXCEPTION):
     #     }
 
 
+# endregion
+
+
+# region ReturnFactory
 class BaseReturnFactory:
 
     def ret_response(self):
@@ -144,12 +152,12 @@ class BaseReturnFactory:
         ...
 
     # todo 删除 MongoDB 中的 _id
-    def ___remove_mongodb_object_id(self, data_source=False):
+    def _remove_mongodb_object_id(self, from_mongdb=False):
         """
         删除 MongoDB 中的 _id
         data_source: False: 非mongodb，True：数据来自mongodb 必须删除 _id
         """
-        if data_source:
+        if from_mongdb:
             data_type = type(self.data)
             if data_type == list:
                 for item in self.data:
