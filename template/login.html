@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎登录</title>
+</head>
+<body>
+<div>登录后查看更多内容</div>
+<div id="phone">请输入手机号：</div>
+<form action="login" method="post" id="submit">
+    <input name="phone" id="phone" value="" type="text">
+    <button type="submit" name="提交" id="btn">提交</button>
+</form>
+
+</body>
+</html>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+    var btn=document.getElementById("btn");
+    var _input=document.getElementById("phone");
+    btn.onclick=function(){
+        _input.onclick();
+    }
+
+</script>
