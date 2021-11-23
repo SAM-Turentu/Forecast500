@@ -65,21 +65,18 @@ class FindAllDataHandler(BaseHandler):
         return await sourceService.find_all_data()
 
 
-# @Route(r'/')
-# class HomeHandler(BaseHandler):
-
 @Route(r'/')
 class HomeHandler(BaseHandler):
+    """
+    @interface name:
+    @desc:
+    @author:
+    @createTime: 2021/10/24 19:12
+    @updateTime(upf): 2021/10/24 19:12
+    """
 
     async def get(self):
-        """
-        @func name:
-        @desc:
-        @author: SAM
-        @createTime: 2021/10/24 18:05
-        @updateTime(upf): 2021/10/24 18:05
-        """
-        if not  self.get_cookie('zy_user'):
+        if not self.get_cookie('zy_user'):
             self.redirect('/login')
         self.render('index.html')
 
@@ -95,13 +92,6 @@ class LoginHandler(BaseHandler):
     """
 
     async def get(self):
-        """
-        @func name:
-        @desc:
-        @author: SAM
-        @createTime: 2021/10/24 19:16
-        @updateTime(upf): 2021/10/24 19:16
-        """
         self.render('login.html')
 
     async def post(self):

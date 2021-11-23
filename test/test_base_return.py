@@ -95,9 +95,10 @@ class Success():
     #     @UpdateTime(upf): 2021/6/4 11:14
     #     @Desc: '请求成功，并正确响应'
     #     """
+    #     self.data = data
+    #     print(type(self.data))
     #     if kwargs.get('from_mongdb') and data:  # 正确返回数据时，才会可能删除 MongoDB 中的 _id，其他类中不需要调用该方法
-    #         print(type(data))
-    #         remove_mongodb_object_id(data=data)
+    #         self.remove_mongodb_object_id(data)
     #     _ret = {
     #         'code': code,
     #         'message': message,
@@ -116,7 +117,7 @@ class Success():
         """
         self.data = data
         if kwargs.get('from_mongdb') and data:  # 正确返回数据时，才会可能删除 MongoDB 中的 _id，其他类中不需要调用该方法
-            self.remove_mongodb_object_id()
+            self.remove_mongodb_object_id(data)
         _ret = {
             'code': code,
             'message': message,
@@ -125,8 +126,8 @@ class Success():
         }
         return _ret
 
-    @lru_cache(maxsize=None)
-    def remove_mongodb_object_id(self):
+    # @lru_cache(maxsize=None)
+    def remove_mongodb_object_id(self, data):
         """
         @func name:
         @desc:
@@ -135,9 +136,9 @@ class Success():
         @updateTime(upf): 2021/10/18 21:14
         """
         try:
-            data = self.data
-            data_type = type(self.data)
-            if data_type == dict:
+            # data = self.data
+            # data_type = type(data)
+            if type(data) == dict:
                 # todo 删除操作并遍历判断是否有list
                 if '_id' in data.keys():
                     del data['_id']
@@ -145,8 +146,7 @@ class Success():
                     if type(v) == list:
                         return self.remove_mongodb_object_id(v)
                 return data
-            if data_type == list:
-                data = list(data)
+            if type(data) == list:
                 for item in data:
                     return self.remove_mongodb_object_id(item)
         except Exception as e:
@@ -182,62 +182,68 @@ class SuccessReturnFactory(BaseReturnFactory):
 #     SUCCESS = _success_ret.ret_response()
 
 
-# @lru_cache(maxsize=None)  # maxsize 为 None 时，缓存可以不受限制地增长
-# def fib_cache(n):
-#     """
-#     @func name:
-#     @desc:
-#     @author: SAM
-#     @createTime: 2021/10/18 19:22
-#     @updateTime(upf): 2021/10/18 19:22
-#     """
-#     if n <= 2:
-#         return 1
-#     else:
-#         print('n: ', n)
-#         return fib_cache(n - 1) + fib_cache(n - 2)
-#
-#
-# if __name__ == '__main__':
-#     print(fib_cache(450))
+@lru_cache(maxsize=None)  # maxsize 为 None 时，缓存可以不受限制地增长
+def fib_cache(n):
+    """
+    @func name:
+    @desc:
+    @author: SAM
+    @createTime: 2021/10/18 19:22
+    @updateTime(upf): 2021/10/18 19:22
+    """
+    if n <= 2:
+        return 1
+    else:
+        print('n: ', n)
+        return fib_cache(n - 1) + fib_cache(n - 2)
+
 
 if __name__ == '__main__':
-    data = {
-        'name': 'SAM',
-        'age': 27,
-        '_id': 'asdf412153e1rvaszdf',
+    print(fib_cache(10))
 
-    }
-    _data = [
-        {
-            'name': 'SAM',
-            'age': 27,
-            'subjects': [
-                {
-                    'name': '语文',
-                    'teacher': '孙自平',
-                    'scores': [80, 77, 83],
-                }, {
-                    'name': '数学',
-                    'teacher': '赵金龙',
-                    'scores': [112, 128, 124, 120],
-                },
-            ]
-        },
-        {
-            'name': 'Turentu',
-            'age': 27,
-            'subjects': [{
-                'name': '数学',
-                'teacher': '赵金龙',
-                'scores': [98, 102, 110, 135],
-            },
-            ]
-        }
-    ]
-    a = Success()
-    ret = a.remove_data(code=200, message='请求成功!', data=data, from_mongdb=True)
-    print(f'ret ({type(ret["data"])}) = {ret}')
+# if __name__ == '__main__':
+#     data = {
+#         'name': 'SAM',
+#         'age': 27,
+#         '_id': 'asdf412153e1rvaszdf',
+#
+#     }
+#     _data = [
+#         {
+#             'name': 'SAM',
+#             'age': 27,
+#             '_id': 'asdf412153e1rvaszdf1234',
+#             'subjects': [
+#                 {
+#                     '_id': '1234asdf412153e1rvaszdf',
+#                     'name': '语文',
+#                     'teacher': '孙自平',
+#                     'scores': [80, 77, 83],
+#                 }, {
+#                     '_id': '123asdf412153e1rvaszdf',
+#                     'name': '数学',
+#                     'teacher': '赵金龙',
+#                     'scores': [112, 128, 124, 120],
+#                 },
+#             ]
+#         },
+#         {
+#             'name': 'Turentu',
+#             'age': 27,
+#             '_id': 'asdf412153e1rvaszdf123',
+#             'subjects': [{
+#                 '_id': '123asdf412153e1rvaszdf',
+#                 'name': '数学',
+#                 'teacher': '赵金龙',
+#                 'scores': [98, 102, 110, 135],
+#             },
+#             ]
+#         }
+#     ]
+#     a = Success()
+#     ret = a.remove_data(code=200, message='请求成功!', data=_data, from_mongdb=True)
+#     # ret = a(code=200, message='请求成功!', data=data, from_mongdb=True)
+#     print(f'ret ({type(ret["data"])}) = {ret}')
     # ReturnJson.SUCCESS(code=200, message='请求成功!', data=data, from_mongdb=True)
     # ret = ReturnJson.SUCCESS(
     #     data=[
