@@ -12,30 +12,34 @@ from oslo_config import cfg, types
 
 CONF = cfg.CONF
 
-# # region Tornado Log
-# log_group = cfg.OptGroup('log', title='Tornado log 配置')
-# CONF.register_group(log_group)
-# CONF.register_cli_opts([
-#     cfg.BoolOpt('False', default=False),
-#     cfg.StrOpt('log_file', default='tornado_main.log'),
-#     cfg.StrOpt('log_dir', default='./logs'),
-#     cfg.StrOpt('log_rotate_interval_type', default='Minutes'),
-#     cfg.IntOpt('log_rotate_interval', default=1),
-#     cfg.StrOpt('log_rotation_type', default='interval'),
-# ], log_group)
-# # endregion
-#
-#
-# # region 日志配置
-# log = logging.getLogger(__name__)
+# region Tornado Log
+log_group = cfg.OptGroup('log', title='Tornado log 配置')
+CONF.register_group(log_group)
+CONF.register_cli_opts([
+    cfg.BoolOpt('False', default=False),
+    cfg.StrOpt('log_file', default='tornado_main.log'),
+    cfg.StrOpt('log_dir', default='./logs'),
+    cfg.StrOpt('log_rotate_interval_type', default='Minutes'),
+    cfg.IntOpt('log_rotate_interval', default=1),
+    cfg.StrOpt('log_rotation_type', default='interval'),
+], log_group)
+# endregion
+
+
+# region 日志配置
+log = logging.getLogger(__name__)
+logging.register_options(CONF)
+CONF.log_file = CONF.log.log_file
+CONF.log_dir = CONF.log.log_dir
+CONF.log_rotate_interval_type = CONF.log.log_rotate_interval_type
+CONF.log_rotate_interval = CONF.log.log_rotate_interval
+CONF.log_rotation_type = CONF.log.log_rotation_type
+logging.setup(CONF, 'Forecast500')
+
+
 # logging.register_options(CONF)
-# CONF.log_file = CONF.log.log_file
-# CONF.log_dir = CONF.log.log_dir
-# CONF.log_rotate_interval_type = CONF.log.log_rotate_interval_type
-# CONF.log_rotate_interval = CONF.log.log_rotate_interval
-# CONF.log_rotation_type = CONF.log.log_rotation_type
-# logging.setup(CONF, 'Forecast500')
-# # endregion
+
+# endregion
 
 
 # region Project Host And Port

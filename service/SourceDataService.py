@@ -125,6 +125,7 @@ class SourceDataService(BaseService):
         @createTime: 2021/5/7 19:15
         @updateTime(upf): 2021/5/7 19:15
         """
+        '2022/4/29 10:25'
         _ret = []
         all_data, all_data_len = await self.sourceDataDAO.query_all_data()
         for item in await all_data.to_list(length=10):
