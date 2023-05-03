@@ -11,8 +11,9 @@ import ast
 import json
 from backend.core.Basehandler import BaseHandler
 from backend.core.RouteHandler import Route
-from backend.utils.Decorate import Return
-from backend.utils.Result import ReturnJson
+from backend.token.Token import TOKEN
+from backend.utils.BaseReturn import ReturnJson
+from backend.utils.Decorate import Return, Auth
 from service.SourceDataService import SourceDataService
 
 
@@ -27,46 +28,24 @@ class HomeHandler(BaseHandler):
     """
 
     @Return
+    @Auth
     async def get(self):
+        user = None
         json_dict = self.json_dict
         value = self.get_argument('value')
-        doc = {'value': value}
-        doc = {'term': 21040, 'red_1': 2, 'red_2': 6, 'red_3': 7, 'red_4': 24, 'red_5': 28, 'red_6': 29, 'blue_1': 16}
-        sourceDataService = SourceDataService()
-        result = await sourceDataService.insert_source_data_service(doc)
-        if result:
-            ...
-        else:  # 插入失败
-            ...
+        print('value: ', value)
+        # token = TOKEN.create_token(user='SAM')
+        return ReturnJson.SUCCESS(data=value)
+
+        # sourceDataService = SourceDataService()
+        # result = await sourceDataService.insert_source_data_service(doc)
+        # if result:
+        #     ...
+        # else:  # 插入失败
+        #     ...
         # return self.write(json.dumps(doc))
 
-        return ReturnJson.success(data=result)
-
-
-@Route('/home')
-class WithDrawHandler(BaseHandler):
-    """
-    @interface name:
-    @desc:
-    @author: SAM
-    @createTime: 2021/5/6 20:59
-    @updateTime(upf): 2021/5/6 20:59
-    """
-
-    @Return
-    async def get(self):
-        sourceService = SourceDataService()
-        read_line = None
-        with open('D:\Projects\Python\Local\Forecast500\statics\win_num.txt', 'r') as f:
-            file = f.readlines()
-            # item = file[0]
-            # item = tuple(int(x) for x in ast.literal_eval(item))
-            # ret = await sourceService.withdraw_data_from_txt(item)
-            for item in file:
-                item = tuple(int(x) for x in ast.literal_eval(item))
-                await sourceService.withdraw_data_from_txt(item)
-        print('ret: ', '上传处理成功!')
-        return self.write(json.dumps({'ret: ', '上传处理成功!'}))
+        # return ReturnJson.SUCCESS(data=result)
 
 
 @Route('/all')
@@ -85,3 +64,41 @@ class FindAllDataHandler(BaseHandler):
         # all_data = await sourceService.find_all_data()
         return await sourceService.find_all_data()
 
+
+@Route(r'/zy')
+class HomeHandler(BaseHandler):
+    """
+    @interface name:
+    @desc:
+    @author:
+    @createTime: 2021/10/24 19:12
+    @updateTime(upf): 2021/10/24 19:12
+    """
+
+    async def get(self):
+        if not self.get_cookie('zy_user'):
+            self.redirect('/login')
+        self.render('index.html')
+
+
+@Route(r'/login')
+class LoginHandler(BaseHandler):
+    """
+    @interface name:
+    @desc:
+    @author:
+    @createTime: 2021/10/24 19:12
+    @updateTime(upf): 2021/10/24 19:12
+    """
+
+    async def get(self):
+        self.render('login.html')
+
+    async def post(self):
+        phone = self.get_body_argument('phone')
+        print(f'章燕的手机号：{phone}')
+        if phone:
+            self.set_cookie('zy_user', 'WelcomeLogin')
+            self.redirect('/')
+        else:
+            self.redirect('/login')

@@ -31,7 +31,7 @@ class BaseDAO():
     @property
     def mongodb(self):
         """
-        @func name:
+        @func name: 获取 MongoDB client
         @desc:
         @author: SAM
         @createTime: 2021/4/29 20:28
@@ -42,7 +42,7 @@ class BaseDAO():
     @property
     def mysql(self):
         """
-        @func name:
+        @func name: 获取 MySQL client
         @desc:
         @author: SAM
         @createTime: 2021/5/16 18:51

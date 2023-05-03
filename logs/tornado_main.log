@@ -1,0 +1,12 @@
+[2;31m[2022-05-01 10:26:23 web web.py:log_exception:1789 ERROR][0m Uncaught exception GET / (::1)
+    HTTPServerRequest(protocol='http', host='localhost:8001', method='GET', uri='/', version='HTTP/1.1', remote_ip='::1')
+    Traceback (most recent call last):
+      File "D:\Commons\Python\ENV\Forecast500\lib\site-packages\tornado\web.py", line 1704, in _execute
+        result = await result
+      File "D:\Projects\Python\Local\Forecast_Systems_Projects\Forecast500\backend\utils\Decorate.py", line 56, in wrapper
+        res = await func(self, *args, **kwargs)
+      File "D:\Projects\Python\Local\Forecast_Systems_Projects\Forecast500\backend\utils\Decorate.py", line 136, in wrapper
+        raise ReturnJson.EXCEPTION(error_message='no token')
+    backend.utils.BaseReturn.SysException: (500, 'no token')
+[2;31m[2022-05-01 10:26:23 web web.py:log_request:2239 ERROR][0m 500 GET / (::1) 25.96ms
+[2;33m[2022-05-01 10:26:23 web web.py:log_request:2239 WARNING][0m 404 GET /favicon.ico (::1) 1.00ms

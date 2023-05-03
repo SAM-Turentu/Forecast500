@@ -7,15 +7,40 @@
 # Summary: '读取配置文件'
 
 
-# from oslo_log import log as logging
+from oslo_log import log as logging
 from oslo_config import cfg, types
 
 CONF = cfg.CONF
 
-# region 日志配置 -- 未启用
-# log = logging.getLogger(__name__)
-# logging.register_options(CONF)
+# region Tornado Log
+log_group = cfg.OptGroup('log', title='Tornado log 配置')
+CONF.register_group(log_group)
+CONF.register_cli_opts([
+    cfg.BoolOpt('False', default=False),
+    cfg.StrOpt('log_file', default='tornado_main.log'),
+    cfg.StrOpt('log_dir', default='./logs'),
+    cfg.StrOpt('log_rotate_interval_type', default='Minutes'),
+    cfg.IntOpt('log_rotate_interval', default=1),
+    cfg.StrOpt('log_rotation_type', default='interval'),
+], log_group)
 # endregion
+
+
+# region 日志配置
+log = logging.getLogger(__name__)
+logging.register_options(CONF)
+CONF.log_file = CONF.log.log_file
+CONF.log_dir = CONF.log.log_dir
+CONF.log_rotate_interval_type = CONF.log.log_rotate_interval_type
+CONF.log_rotate_interval = CONF.log.log_rotate_interval
+CONF.log_rotation_type = CONF.log.log_rotation_type
+logging.setup(CONF, 'Forecast500')
+
+
+# logging.register_options(CONF)
+
+# endregion
+
 
 # region Project Host And Port
 project_group = cfg.OptGroup(name='dd', title="project 地址配置")
@@ -36,6 +61,7 @@ CONF.register_cli_opts([
 ], mongodb_group)
 # endregion
 
+
 # region MySQL
 mysql_group = cfg.OptGroup(name='mysql', title="MySQL DSN配置")
 CONF.register_group(mysql_group)
@@ -47,6 +73,7 @@ CONF.register_cli_opts([
     cfg.StrOpt('database', default=''),
 ], mysql_group)
 # endregion
+
 
 # region Tornado Setting
 settings_group = cfg.OptGroup('settings', title='Tornado settings 配置')
@@ -60,8 +87,18 @@ CONF.register_cli_opts([
     cfg.BoolOpt('debug', default=False),
     cfg.BoolOpt('autoreload', default=False),
     # cfg.StrOpt('ui_methods', default='default'),
+    cfg.IntOpt('max_buffer_size', default=1024 * 1024 * 100),
 ], settings_group)
 # endregion
+
+token_group = cfg.OptGroup('token', title='Tornado token 配置')
+CONF.register_group(token_group)
+CONF.register_cli_opts([
+    cfg.IntOpt('token_exp', default=604800),
+    cfg.StrOpt('token_algorithm', default='HS256'),
+    cfg.StrOpt('token_secret', default='secret_jwt-SAM-Turentu'),
+    cfg.StrOpt('issure', default='SAM'),
+], token_group)
 
 # 在项目启动命令中添加配置模式：开发(dev)，测试(uat)，生产(prod)
 # 项目启动命令添加下面命令，不添加则默认dev环境

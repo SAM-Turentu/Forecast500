@@ -16,7 +16,7 @@ AbstractFactoryPattern
 
 class IUser:
 
-    def GetSser(self):
+    def GetUser(self):
         """
         @func name:
         @desc:
@@ -62,7 +62,7 @@ class IDepartment:
 
 class CAccessUser(IUser):
 
-    def GetSser(self):
+    def GetUser(self):
         """
         @func name:
         @desc:
@@ -108,7 +108,7 @@ class CAccessDepartment(IDepartment):
 
 class CSqlUser(IUser):
 
-    def GetSser(self):
+    def GetUser(self):
         """
         @func name:
         @desc:
@@ -164,7 +164,7 @@ class IFactory:
         """
         ...
 
-    def CreateDepartment(slef):
+    def CreateDepartment(self):
         """
         @func name:
         @desc:
@@ -188,7 +188,7 @@ class AccessFactory(IFactory):
         temp = CAccessUser()
         return temp
 
-    def CreateDepartment(slef):
+    def CreateDepartment(self):
         """
         @func name:
         @desc:
@@ -213,7 +213,7 @@ class SqlFactory(IFactory):
         temp = CSqlUser()
         return temp
 
-    def CreateDepartment(slef):
+    def CreateDepartment(self):
         """
         @func name:
         @desc:
@@ -229,5 +229,5 @@ if __name__ == '__main__':
     factory = SqlFactory()
     user = factory.CreateUser()
     depart = factory.CreateDepartment()
-    user.GetSser()
+    user.GetUser()
     depart.GetDepartment()

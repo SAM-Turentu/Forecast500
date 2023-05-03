@@ -7,6 +7,9 @@
 # Summary: '项目测试'
 
 
+import os
+
+
 def main():
     """
     @func name:
@@ -88,5 +91,13 @@ def main():
     #     print(f'蓝球 {k} 出现的概率 {a}%, 出现次数 {v}')
 
 
+def read_config_file():
+    path = os.getcwd()
+    print(path)
+    with open(path) as f:
+        txt = f.read()
+
+
 if __name__ == '__main__':
-    main()
+    # main()
+    read_config_file()
